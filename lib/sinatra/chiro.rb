@@ -5,18 +5,18 @@ module Sinatra
   module Chiro
     @@documentation = []
 
-    def endpoint(description)
-      @params = []
+    def endpoint(description=nil)
+      @named_params = []
       @query_strings = []
       yield
-      @@documentation << Endpoint.new(description, @verb, @path, @params, @query_strings, @returns)
+      @@documentation << Endpoint.new(description, @verb, @path, @named_params, @query_strings, @returns)
     end
 
-    def param(name, type, description)
-      @params << {name: name, type: type, description: description}
+    def named_param(name, type, description)
+      @named_params << {name: name, type: type, description: description}
     end
 
-    def query_string(name, type, description)
+    def query_param(name, type, description)
       @query_strings << {name: name, type: type, description: description}
     end
 

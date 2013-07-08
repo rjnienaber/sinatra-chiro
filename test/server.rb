@@ -4,9 +4,9 @@ class HelloApp < Sinatra::Base
   register Sinatra::Chiro
 
   endpoint "Says hi to the caller" do
-    param(:greeting, String, 'How you want to be greeted')
-    param(:people, Array[String], 'How you want to be greeted')
-    query_string(:language, 'en|af-za|fr', 'Language to be greeted in')
+    named_param(:greeting, String, 'How you want to be greeted')
+    named_param(:people, Array[String], 'How you want to be greeted')
+    query_param(:language, 'en|af-za|fr', 'Language to be greeted in')
     #payload(:contact_id, '')
 
     get '/hi/:greeting' do
