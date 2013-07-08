@@ -20,9 +20,11 @@ describe 'Chiro' do
   end
 
   context '#endpoint' do
-    it 'gives a brief description' do
+    it 'gives a brief description with defaults' do
       subject.endpoint('People greeter') {}
       endpoint_doc.description.should == 'People greeter'
+      endpoint_doc.validate?.should be_true
+      endpoint_doc.verb.should == :GET
     end
   end
 

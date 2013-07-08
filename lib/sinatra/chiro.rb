@@ -5,11 +5,19 @@ module Sinatra
   module Chiro
     @@documentation = []
 
-    def endpoint(description=nil)
+    def endpoint(description=nil, opts={})
+      opts[:description] ||= description
+      opts[:perform_validation] ||= true
       @named_params = []
-      @query_strings = []
+      @query_params = []
+
       yield
-      @@documentation << Endpoint.new(description, @verb, @path, @named_params, @query_strings, @returns)
+
+      opts[:verb] = @verb || :GET
+      opts[:named_params] = @named_params
+      opts[:query_params] = @query_params
+      opts[:returns] = @returns
+      @@documentation << Endpoint.new(opts)
     end
 
     def named_param(name, description, opts={})
@@ -22,7 +30,7 @@ module Sinatra
     def query_param(name, description, opts={})
       Chiro.remove_unknown_param_keys(opts)
       Chiro.set_param_defaults(opts)
-      @query_strings << {name: name, description: description}.merge(opts)
+      @query_params << {name: name, description: description}.merge(opts)
     end
 
     def get(path, opts = {}, &block)
