@@ -19,7 +19,7 @@ class Endpoint
      :verb => verb,
      :path => path,
      :named_params => named_params,
-     :query_param => query_params,
+     :query_params => query_params,
      :returns => returns}.to_json
   end
 end

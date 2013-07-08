@@ -12,12 +12,17 @@ module Sinatra
       @@documentation << Endpoint.new(description, @verb, @path, @named_params, @query_strings, @returns)
     end
 
-    def named_param(name, type, description)
-      @named_params << {name: name, type: type, description: description}
+    def named_param(name, description, opts={})
+      opts[:optional] = false
+      Chiro.remove_unknown_param_keys(opts)
+      Chiro.set_param_defaults(opts)
+      @named_params << {name: name, description: description}.merge(opts)
     end
 
-    def query_param(name, type, description)
-      @query_strings << {name: name, type: type, description: description}
+    def query_param(name, description, opts={})
+      Chiro.remove_unknown_param_keys(opts)
+      Chiro.set_param_defaults(opts)
+      @query_strings << {name: name, description: description}.merge(opts)
     end
 
     def get(path, opts = {}, &block)
@@ -41,6 +46,18 @@ module Sinatra
         @@documentation.map { |d| d.route }.to_json
       end
     end
+
+    private
+    def self.remove_unknown_param_keys(opts)
+      known_options = [:default, :type, :optional]
+      opts.delete_if { |k| !k.is_a?(Symbol) || !known_options.include?(k)}
+    end
+
+    def self.set_param_defaults(opts)
+      opts[:type] ||= String
+      opts[:optional] ||= true if opts[:optional].nil?
+    end
+
   end
 
   register Sinatra::Chiro

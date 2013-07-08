@@ -13,7 +13,7 @@ module Sinatra
 
         path = env['PATH_INFO']
         docs = @documentation.select { |d| d.path.include?(path)}.flatten.first
-        raise "Path #{path} doesn't have any documentation" unless docs
+        raise "Path #{path} doesn't have any docs" unless docs
 
         response_body = [docs.to_json]
 
