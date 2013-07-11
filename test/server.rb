@@ -6,7 +6,7 @@ class HelloApp < Sinatra::Base
   endpoint "Says hi to the caller" do
     named_param(:greeting, 'How you want to be greeted')
     named_param(:people, 'How you want to be greeted', :type => Array[String])
-    query_param(:language, 'en|af-za|fr', 'Language to be greeted in')
+    query_param(:language, 'Language to be greeted in', :type => 'en|af-za|fr')
     #payload(:contact_id, '')
 
     get '/hi/:greeting' do
