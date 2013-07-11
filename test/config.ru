@@ -1,5 +1,6 @@
 require 'sinatra'
 require 'sinatra/base'
+require "sinatra/reloader"
 require 'json'
 
 $:.unshift(File.dirname(__FILE__) + '/../lib/')

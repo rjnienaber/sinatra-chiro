@@ -21,6 +21,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'sinatra', '~> 1.4.3'
   spec.add_runtime_dependency 'json', '~> 1.8.0'
 
+  spec.add_development_dependency 'sinatra-contrib', "~> 1.4.0"
   spec.add_development_dependency 'rspec', '~> 2.13.0'
   spec.add_development_dependency 'rake'
 end
