@@ -47,11 +47,12 @@ module Sinatra
           end
         end
 
-
-
-        ['language', 'year', 'people', 'greeting'].each do |parameter|
+        ['language', 'year', 'greeting'].each do |parameter|
           errors << "must include a #{parameter} parameter" if query_hash[parameter] == nil
         end
+
+        lang = query_hash['language']
+        errors << "not a valid language" unless (lang=="en" or lang=="fr" or lang=="af-za")
 
         query_hash.each do|k,v|
           errors << "#{k} is not a valid parameter" if (k!="language" and k!="people" and k!="greeting" and k!="year")
