@@ -25,13 +25,13 @@ module Sinatra
       opts[:optional] = false
       Chiro.remove_unknown_param_keys(opts)
       Chiro.set_param_defaults(opts)
-      @named_params << {name => name, description => description}.merge(opts)
+      @named_params << {:name => name, :description => description}.merge(opts)
     end
 
     def query_param(name, description, opts={})
       Chiro.remove_unknown_param_keys(opts)
       Chiro.set_param_defaults(opts)
-      @query_params << {name => name, description => description}.merge(opts)
+      @query_params << {:name => name, :description => description}.merge(opts)
     end
 
     def get(path, opts = {}, &block)

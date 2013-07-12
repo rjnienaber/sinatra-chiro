@@ -74,6 +74,7 @@ describe 'Chiro' do
       subject.endpoint do
         subject.query_param(:people, 'The number of people to be greeted', :type => Fixnum, :default => 1, :optional => true)
       end
+      p endpoint_doc
       q_param = endpoint_doc.query_params[0]
 
       q_param[:name].should == :people
