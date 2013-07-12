@@ -38,15 +38,16 @@ module Sinatra
         query_hash = Rack::Utils.parse_nested_query("#{query_string}")
 
        errors = []
-=begin
+
         query_hash.each do |k, v|
-          unless k == 'people'
-            @message = "#{k} parameter must be a String" if k.type != String
+          if k == 'people'
+            errors << "people parameter must be an Array" if !v.is_a? Array
           else
-            @message = "people parameter must be an Array" if k.type != Array
+            errors << "#{k} parameter must be a String" if v.is_a? Array
           end
         end
-=end
+
+
 
         ['language', 'year', 'people', 'greeting'].each do |parameter|
           errors << "must include a #{parameter} parameter" if query_hash[parameter] == nil
