@@ -6,30 +6,35 @@ class HelloApp < Sinatra::Base
 
   #http://localhost:9292/hi?people[]=richard&people[]=scott&people[]=roger&greeting=hi
   endpoint "Says hi to the caller" do
-    query_param(:greeting, 'How you want to be greeted')
-    query_param(:year, 'The year to greet people with', :type => Fixnum, :optional => false)
-    query_param(:people, 'Who you want to greet', :type => Array[String], :optional => false)
-    query_param(:language, 'Language to be greeted in', :type => /^en$|^af-za$|^fr$/)
+    query_param(:name, 'The name of the person')
+    query_param(:height, 'The persons height', :type => Float, :optional => false)
+    query_param(:birthdate, 'The date of birth of person', :type => Date, :optional => false)
+    query_param(:deathtime, 'Time of death of person', :type => DateTime, :optional => false)
+
+    query_param(:interests, 'The persons interests', :type => Array[String])
+
+    query_param(:gender, 'Gender of the person', :type => /^en$|^af-za$|^fr$/)
     #payload(:contact_id, '')
 
 
 
-    get '/hi' do
-      greeting = params[:greeting] || 'Hello'   # gets greeting parameter from url
-      language = params[:language] || 'en'      # gets language parameter from url
-      year = params[:year].to_i                 # gets year parameter from url
+    get '/bio' do
+      name = params[:name]               # gets name parameter from url
+      gender = params[:gender] || 'it'      # gets gender parameter from url
+      height = params[:height]
+      deathtime = Time.parse("#{params[:deathtime]}")
+      deathdate = Date.parse("#{params[:deathtime]}")
+      birthdate = Date.parse("#{params[:birthdate]}")
+      interests = params[:interests].join(", ") || "nothing in particular"
 
-      greetee = if params[:people]
-                  params[:people].join(", ")
-                else
-                  case language
-                    when 'af-za' then 'wêreld'
-                    when 'fr' then 'monde'
-                    else 'world'
-                  end
-                end                              # if no value param for people given in url, use language given for world
+      pronoun = case gender
+                 when 'male' then 'he'
+                 when 'female' then 'she'
+                 else 'it'
+                end
 
-      "#{greeting} #{greetee}! Happy new year for #{year}"
+
+      "#{name.capitalize} was born on #{birthdate.strftime('%d %b %Y')}. #{pronoun.capitalize} was interested in #{interests}, and was #{height}m tall before #{pronoun} died, at #{deathtime.strftime('%l:%M%P')} on #{deathdate.strftime('%a %d %b %Y')}."
     end
 
 
