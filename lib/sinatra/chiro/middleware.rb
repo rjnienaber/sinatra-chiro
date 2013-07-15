@@ -52,24 +52,16 @@ module Sinatra
         end
 
         lang = query_hash['language']
-        errors << "not a valid language" unless (lang=="en" or lang=="fr" or lang=="af-za")
+        errors << "not a valid language" unless (lang=="en" or lang=="fr" or lang=="af-za") if lang !=nil
+
+        year = query_hash['year']
+        errors << "year must be a number" unless (year =~ /^[-+]?[0-9]+$/) if year !=nil
 
         query_hash.each do|k,v|
           errors << "#{k} is not a valid parameter" if (k!="language" and k!="people" and k!="greeting" and k!="year")
         end
 
         [200, {'Content-Type' => 'text/plain'}, [errors.join("\n")]] if !errors.empty?
-
-
-        #find the endpoint using the 'url'
-        ## if there is no endpoint, just return
-        #get all the query string parameters from the endpoint
-        #pull query string parameters from 'env'
-
-        #check that there are no extra parameters
-        #check that all required parameters are present
-        #check that parameters is of the right type
-
 
       end
     end
