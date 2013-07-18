@@ -36,53 +36,72 @@ module Sinatra
 
       def validate(url, env)
 
+
+        require 'pp'
+        query_params = @documentation[0].query_params
         query_string = env['QUERY_STRING']
         query_hash = Rack::Utils.parse_nested_query("#{query_string}")
-
         errors = []
 
+        allowed_params = []
+        given_params = []
         query_hash.each do |k, v|
-          if k == 'interests'
-            errors << "interests parameter must be an Array" if !v.is_a? Array
-          else
-            errors << "#{k} parameter must be a String" if v.is_a? Array
+          given_params << k.to_sym
+        end
+
+
+        query_params.each do |hash|
+          param = hash[:name]
+          parameter = param.to_s
+          unless query_hash[parameter] == nil
+            if hash[:type] == String
+              errors << "#{parameter} parameter must be a string of only letters" if query_hash[parameter]!~/^[a-zA-Z]*$/
+
+            elsif hash[:type] == Fixnum
+              errors << "#{parameter} parameter must be an integer" if query_hash[parameter]!~/^\s*\d+\s*$/
+
+            elsif hash[:type] == Float
+              errors << "#{parameter} parameter must be a Float" if query_hash[parameter]!~/^\s*[+-]?((\d+_?)*\d+(\.(\d+_?)*\d+)?|\.(\d+_?)*\d+)(\s*|([eE][+-]?(\d+_?)*\d+)\s*)$/
+
+            elsif hash[:type] == Array[String]
+              errors << "#{parameter} parameter must be an Array of Strings" if !query_hash[parameter].is_a? Array
+
+            elsif hash[:type] == Date
+              errors << "#{parameter} parameter must be a string in the format: yyyy-mm-dd" if query_hash[parameter] !~ /^\d{4}-\d{2}-\d{2}$/
+              begin
+                Date.parse("#{query_hash[parameter]}")
+              rescue ArgumentError
+                errors << "#{parameter} parameter must be a string in the format: yyyy-mm-dd"
+              end
+
+            elsif hash[:type] == DateTime
+              errors << "#{parameter} parameter must be a string in the format: yyyy-mm-ddThh:mm:ss" if query_hash[parameter] !~ /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/
+              begin
+                Time.parse("#{query_hash[parameter]}")
+              rescue ArgumentError
+                errors << "#{parameter} parameter must be a string in the format: yyyy-mm-ddThh:mm:ss"
+              end
+
+            elsif hash[:type] == :boolean
+              errors << "#{parameter} parameter must be a boolean" unless (query_hash[parameter]=="true" or query_hash[parameter]=="false")
+            end
+
+            if hash[:type].is_a? Regexp
+              errors << "#{parameter} parameter should match regex: #{hash[:type]}" if query_hash[parameter] !~ hash[:type]
+            end
+          end
+
+          allowed_params << param
+
+          if !hash[:optional]
+            errors << "must include a #{parameter} parameter" if query_hash[parameter] == nil
           end
         end
 
-        ['interests', 'birthdate', 'name', 'height', 'deathtime'].each do |parameter|
-          errors << "must include a #{parameter} parameter" if query_hash[parameter] == nil
+        given_params.each do|param|
+          parameter = param.to_s
+          errors << "#{parameter} is not a valid parameter" if !allowed_params.include?(param)
         end
-
-        sex = query_hash['gender']
-        errors << "not a valid gender" unless (sex ==nil or sex=="male" or sex=="female") if sex !=nil
-
-        height = query_hash['height']
-        errors << "height must be a float" if (height !~ /^\s*[+-]?((\d+_?)*\d+(\.(\d+_?)*\d+)?|\.(\d+_?)*\d+)(\s*|([eE][+-]?(\d+_?)*\d+)\s*)$/) unless height ==nil
-        errors << "height must be positive" if (height.to_i < 0) unless height ==nil
-        errors << "height must be less than 3" if (height.to_i >= 3.0) unless height ==nil
-
-
-        if query_hash['birthdate'] != nil
-          begin
-            Date.parse("#{query_hash['birthdate']}")
-          rescue ArgumentError
-            errors << "invalid date of birth"
-          end
-        end
-
-        if query_hash['deathtime'] != nil
-          begin
-            Time.parse("#{query_hash['deathtime']}")
-          rescue ArgumentError
-            errors << "invalid time/date of death"
-          end
-        end
-
-        query_hash.each do|k,v|
-          errors << "#{k} is not a valid parameter" if (k!="gender" and k!="interests" and k!="name" and k!="birthdate" and k!="height" and k!="deathtime")
-        end
-
-
 
         [403, {'Content-Type' => 'text/plain'}, [errors.join("\n")]] if !errors.empty?
 
