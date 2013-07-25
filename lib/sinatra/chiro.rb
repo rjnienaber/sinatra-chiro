@@ -1,5 +1,6 @@
 require 'sinatra/chiro/endpoint'
 require 'sinatra/chiro/middleware'
+require 'sinatra/chiro/validate'
 
 module Sinatra
   module Chiro
@@ -23,6 +24,13 @@ module Sinatra
 
     def named_param(name, description, opts={})
       opts[:optional] = false
+      Chiro.remove_unknown_param_keys(opts)
+      Chiro.set_param_defaults(opts)
+      @named_params << {:name => name, :description => description}.merge(opts)
+    end
+
+    def payload(name, description, opts={})
+      opts[:optional] = true
       Chiro.remove_unknown_param_keys(opts)
       Chiro.set_param_defaults(opts)
       @named_params << {:name => name, :description => description}.merge(opts)
