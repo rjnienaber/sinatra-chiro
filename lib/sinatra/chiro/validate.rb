@@ -11,25 +11,17 @@ module Sinatra
 
         require 'pp'
         verb, url = env['sinatra.route'].split('/')
-        path_array = env['sinatra.route'].split('/')[1..-1]
         errors = []
-
         @index = nil
+        endpoint_count = 0
 
-        pp path_array
-        pp @documentation[1].path.split('/')[1..-1]
 
-        @documentation.map.with_index.to_a.each do |endpoint, index|
-          if url == endpoint.path.split('/')[1]
-            @index = index
+        @documentation.map.with_index.to_a.each do |endpoint, index|    # gives each endpoint an index and iterates
+          endpoint_count += 1                                           # counts the number of endpoints
+          if url == endpoint.path.split('/')[1]                         # matches endpoint path to url
+            @index = index                      # assigns @index the value of the endpoint with the appropriate path
           end
         end
-
-        if @documentation[0].path.split('/')[1..-1] != path_array
-        end
-
-
-        #errors << "/#{url} not found. Please try a different path." unless url == 'form' or url == 'bio'
 
         require 'time'
 
@@ -40,7 +32,8 @@ module Sinatra
 
         named_params = @documentation[@index].named_params
         query_params = @documentation[@index].query_params
-        all_params = named_params + query_params
+        payload = @documentation[@index].payload
+        all_params = named_params + query_params + payload      # prepares all_params array to validate all at once
 
 
         allowed_params = []
@@ -50,7 +43,7 @@ module Sinatra
           param = hash[:name]
           parameter = param.to_s
 
-
+# all parameters validated here
           unless all_given[parameter] == nil
             if hash[:type] == String
               errors << "#{parameter} parameter must be a string of only letters" if all_given[parameter]!~/^[a-zA-Z]*$/
@@ -113,8 +106,15 @@ module Sinatra
           errors << "#{param} is not a valid parameter" if !allowed_params.include?(param)
         end
 
-        if !errors.empty? then
-          return errors.join('<br>')
+
+        if @index == (endpoint_count-1)           # if final endpoint used, path not found. final endpoint in server must always be wildcard
+          path_found = false
+        end
+
+        if path_found == false then
+          return "not found"
+        elsif !errors.empty? then
+          return errors.join('<br>')              # if there are errors return them!
         else
           return nil
         end

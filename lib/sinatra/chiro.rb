@@ -11,12 +11,14 @@ module Sinatra
       opts[:perform_validation] ||= true
       @named_params = []
       @query_params = []
+      @payload = []
 
       yield
 
       opts[:verb] = @verb || :GET
       opts[:named_params] = @named_params
       opts[:query_params] = @query_params
+      opts[:payload] = @payload
       opts[:returns] = @returns
       opts[:path] = @path
       @@documentation << Endpoint.new(opts)
@@ -33,7 +35,7 @@ module Sinatra
       opts[:optional] = true
       Chiro.remove_unknown_param_keys(opts)
       Chiro.set_param_defaults(opts)
-      @named_params << {:name => name, :description => description}.merge(opts)
+      @payload << {:name => name, :description => description}.merge(opts)
     end
 
     def query_param(name, description, opts={})

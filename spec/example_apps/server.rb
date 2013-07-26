@@ -5,7 +5,10 @@ class HelloApp < Sinatra::Base
 
   def route_eval
     error = Sinatra::Chiro::MyValidator.new.validate(params, env)
-    if error!= nil
+    if error == "not found"
+      status 404
+      throw :halt, "Path not found"
+    elsif error!= nil
       status 403
       throw :halt, "#{error}"
     end
@@ -83,9 +86,7 @@ class HelloApp < Sinatra::Base
   end
 
   endpoint 'Failed path' do
-    get '/*' do
-      status 404
-      "path not found"
+    get '/*'do
     end
   end
 
