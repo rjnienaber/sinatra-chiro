@@ -4,25 +4,6 @@ class HelloApp < Sinatra::Base
   register Sinatra::Chiro
   require 'pp'
 
-  def route_eval
-    if params.has_key? "help"
-      help = Sinatra::Chiro::Documentation.new.show(self, env)
-      status 200
-      throw :halt, "#{help}"
-    else
-      error = Sinatra::Chiro::MyValidator.new.validate(self, params, env)
-      if error == "not found"
-        status 404
-        throw :halt, "Path not found"
-      elsif error!= nil
-        status 403
-        throw :halt, "#{error}"
-      end
-    end
-    super
-  end
-
-
   endpoint 'Fill out a form' do
     named_param(:gender, 'The gender of the user', :optional => false, :type => /^male$|^female$/)
     named_param(:surname, 'The surname of the user', :optional => false)
