@@ -3,17 +3,9 @@ ru_file = File.dirname(__FILE__) + '/../example_apps/config.ru'
 SERVER_APP = Rack::Builder.parse_file(ru_file).first
 
 
-#before(:all) do
-#  p Sinatra::Chiro.class_variable_get('@@documentation')
-#  ru_file = File.dirname(__FILE__) + '/../example_apps/config.ru'
-#  @server_app = Rack::Builder.parse_file(ru_file).first
-#
-#end
-
 describe 'Server application' do
   def app
     SERVER_APP
-    #@server_app
   end
 
   context 'succeeds' do

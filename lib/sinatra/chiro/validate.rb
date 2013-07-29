@@ -1,19 +1,20 @@
 module Sinatra
   module Chiro
     class MyValidator
-      def initialize(opts={})
-        @documentation = opts[:documentation[0]] || Sinatra::Chiro.class_variable_get('@@documentation')
-      end
+      #def initialize(opts={})
+      #  @documentation = opts[:documentation[0]] || Sinatra::Chiro.class_variable_get('@@documentation')
+      #end
 
-      def validate(params, env)
+      def validate(app, params, env)
 
         require 'pp'
         verb, url = env['sinatra.route'].split('/')
         errors = []
         @index = nil
 
+        documentation = app.class.documentation
 
-        @documentation.map.with_index.to_a.each do |endpoint, index|    # gives each endpoint an index and iterates
+        documentation.map.with_index.to_a.each do |endpoint, index|    # gives each endpoint an index and iterates
           if url == endpoint.path.split('/')[1]                         # matches endpoint path to url
             @index = index                      # assigns @index the value of the endpoint with the appropriate path
           end
@@ -26,9 +27,9 @@ module Sinatra
         my_params.delete('splat')
         all_given = my_params
 
-        named_params = @documentation[@index].named_params
-        query_params = @documentation[@index].query_params
-        payload = @documentation[@index].forms
+        named_params = documentation[@index].named_params
+        query_params = documentation[@index].query_params
+        payload = documentation[@index].forms
         all_params = named_params + query_params + payload      # prepares all_params array to validate all at once
 
 

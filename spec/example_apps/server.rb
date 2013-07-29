@@ -6,11 +6,11 @@ class HelloApp < Sinatra::Base
 
   def route_eval
     if params.has_key? "help"
-      help = Sinatra::Chiro::Documentation.new.show(env)
+      help = Sinatra::Chiro::Documentation.new.show(self, env)
       status 200
       throw :halt, "#{help}"
     else
-      error = Sinatra::Chiro::MyValidator.new.validate(params, env)
+      error = Sinatra::Chiro::MyValidator.new.validate(self, params, env)
       if error == "not found"
         status 404
         throw :halt, "Path not found"

@@ -4,10 +4,10 @@ require 'sinatra/chiro/validate'
 
 module Sinatra
   module Chiro
-    @@documentation = []
+    attr_reader :documentation
 
     def endpoint(description=nil, opts={})
-      puts "TEST 1"
+      @documentation ||= []
       opts[:description] ||= description
       opts[:perform_validation] ||= true
       @named_params = []
@@ -22,7 +22,7 @@ module Sinatra
       opts[:forms] = @forms
       opts[:returns] = @returns
       opts[:path] = @path
-      @@documentation << Endpoint.new(opts)
+      @documentation << Endpoint.new(opts)
     end
 
     def named_param(name, description, opts={})
@@ -63,7 +63,7 @@ module Sinatra
 
     def self.registered(app)
       app.get '/routes' do
-        @@documentation.map { |d| d.route }.to_json
+        app.documentation.map { |d| d.route }.to_json
       end
     end
 

@@ -1,14 +1,6 @@
 require 'spec_helper'
 
 describe 'Chiro' do
-  before do
-    Sinatra::Chiro.class_variable_set('@@documentation', [])
-  end
-
-  after(:all) do
-    Sinatra::Chiro.class_variable_set('@@documentation', [])
-  end
-
   subject do
     Class.new(Sinatra::Base) do
       register Sinatra::Chiro
@@ -16,7 +8,7 @@ describe 'Chiro' do
   end
 
   def endpoint_doc
-    Sinatra::Chiro.class_variable_get('@@documentation').first
+    subject.documentation.first
   end
 
   context '#endpoint' do
