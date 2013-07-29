@@ -1,37 +1,24 @@
 require 'sinatra/chiro/endpoint'
 require 'sinatra/chiro/document'
 require 'sinatra/chiro/validate'
+require 'sinatra/chiro/monkey_patch'
 
 module Sinatra
-
-  class Base
-    #we monkey patch here because at this point we know the name of the route
-    alias_method :old_route_eval, :route_eval
-    def route_eval
-      if params.has_key? "help"
-        help = Sinatra::Chiro::Documentation.new.show(self, env)
-        status 200
-        throw :halt, "#{help}"
-      else
-        error = Sinatra::Chiro::MyValidator.new.validate(self, params, env)
-        if error == "not found"
-          status 404
-          throw :halt, "Path not found"
-        elsif error!= nil
-          status 403
-          throw :halt, "#{error}"
-        end
-      end
-
-      old_route_eval { yield }
-    end
-  end
-
   module Chiro
-    attr_reader :documentation
+    def endpoints
+      @endpoints ||= []
+    end
+
+    def validator
+      @validator ||= MyValidator.new(endpoints)
+    end
+
+    def documentation
+      @documentation ||= Documentation.new(endpoints)
+    end
+
 
     def endpoint(description=nil, opts={})
-      @documentation ||= []
       opts[:description] ||= description
       opts[:perform_validation] ||= true
       @named_params = []
@@ -46,7 +33,7 @@ module Sinatra
       opts[:forms] = @forms
       opts[:returns] = @returns
       opts[:path] = @path
-      @documentation << Endpoint.new(opts)
+      endpoints << Endpoint.new(opts)
     end
 
     def named_param(name, description, opts={})

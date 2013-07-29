@@ -2,13 +2,15 @@ module Sinatra
   module Chiro
     class Documentation
 
-      #def initialize(opts={})
-      #  @documentation = opts[:documentation[0]] || Sinatra::Chiro.class_variable_get('@@documentation')
-      #end
+      attr_reader :endpoints
 
-      def show(app, env)
-        verb, url = env['sinatra.route'].split('/')
-        endpoint = app.class.documentation.select { |d| d.path.include?(url) }.flatten.first
+      def initialize(endpoints)
+        @endpoints = endpoints
+      end
+
+      def show(env)
+        _, url = env['sinatra.route'].split('/')
+        endpoint = endpoints.select { |d| d.path.include?(url) }.flatten.first
         raise "Path #{url} doesn't have any docs" unless endpoint
 
         response_body = [endpoint.to_json]

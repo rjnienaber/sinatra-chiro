@@ -1,0 +1,24 @@
+module Sinatra
+  class Base
+    #we monkey patch here because at this point we know the name of the route
+    alias_method :old_route_eval, :route_eval
+    def route_eval
+      if params.has_key? "help"
+        help = self.class.documentation.show(env)
+        status 200
+        throw :halt, "#{help}"
+      else
+        error = self.class.validator.validate(params, env)
+        if error == "not found"
+          status 404
+          throw :halt, "Path not found"
+        elsif error!= nil
+          status 403
+          throw :halt, "#{error}"
+        end
+      end
+
+      old_route_eval { yield }
+    end
+  end
+end

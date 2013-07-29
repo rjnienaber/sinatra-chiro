@@ -8,7 +8,7 @@ describe 'Chiro' do
   end
 
   def endpoint_doc
-    subject.documentation.first
+    subject.endpoints.first
   end
 
   context '#endpoint' do
