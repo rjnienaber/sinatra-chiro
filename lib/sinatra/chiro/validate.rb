@@ -13,11 +13,9 @@ module Sinatra
         verb, url = env['sinatra.route'].split('/')
         errors = []
         @index = nil
-        endpoint_count = 0
 
 
         @documentation.map.with_index.to_a.each do |endpoint, index|    # gives each endpoint an index and iterates
-          endpoint_count += 1                                           # counts the number of endpoints
           if url == endpoint.path.split('/')[1]                         # matches endpoint path to url
             @index = index                      # assigns @index the value of the endpoint with the appropriate path
           end
@@ -106,14 +104,7 @@ module Sinatra
           errors << "#{param} is not a valid parameter" if !allowed_params.include?(param)
         end
 
-
-        if @index == (endpoint_count-1)           # if final endpoint used, path not found. final endpoint in server must always be wildcard
-          path_found = false
-        end
-
-        if path_found == false then
-          return "not found"
-        elsif !errors.empty? then
+        if !errors.empty? then
           return errors.join('<br>')              # if there are errors return them!
         else
           return nil
