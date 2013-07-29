@@ -1,5 +1,5 @@
 class Endpoint
-  attr_reader :description, :verb, :path, :named_params, :query_params, :payload, :returns
+  attr_reader :description, :verb, :path, :named_params, :query_params, :forms, :returns
 
   def initialize(opts)
     @description = opts[:description]
@@ -9,7 +9,7 @@ class Endpoint
     @query_params = opts[:query_params]
     @perform_validation = opts[:perform_validation]
     @returns = opts[:returns]
-    @payload = opts[:payload]
+    @forms = opts[:forms]
   end
 
 
@@ -27,8 +27,8 @@ class Endpoint
      :path => path,
      :named_params => named_params,
      :query_params => query_params,
-     :payload => payload,
+     :forms => forms,
      :returns => returns,
-     :opts => payload}.to_json
+     :opts => opts}.to_json
   end
 end

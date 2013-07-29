@@ -1,5 +1,5 @@
 require 'sinatra/chiro/endpoint'
-require 'sinatra/chiro/middleware'
+require 'sinatra/chiro/document'
 require 'sinatra/chiro/validate'
 
 module Sinatra
@@ -7,18 +7,19 @@ module Sinatra
     @@documentation = []
 
     def endpoint(description=nil, opts={})
+      puts "TEST 1"
       opts[:description] ||= description
       opts[:perform_validation] ||= true
       @named_params = []
       @query_params = []
-      @payload = []
+      @forms = []
 
       yield
 
       opts[:verb] = @verb || :GET
       opts[:named_params] = @named_params
       opts[:query_params] = @query_params
-      opts[:payload] = @payload
+      opts[:forms] = @forms
       opts[:returns] = @returns
       opts[:path] = @path
       @@documentation << Endpoint.new(opts)
@@ -31,11 +32,11 @@ module Sinatra
       @named_params << {:name => name, :description => description}.merge(opts)
     end
 
-    def payload(name, description, opts={})
+    def form(name, description, opts={})
       opts[:optional] = true
       Chiro.remove_unknown_param_keys(opts)
       Chiro.set_param_defaults(opts)
-      @payload << {:name => name, :description => description}.merge(opts)
+      @forms << {:name => name, :description => description}.merge(opts)
     end
 
     def query_param(name, description, opts={})

@@ -1,5 +1,3 @@
-
-
 module Sinatra
   module Chiro
     class MyValidator
@@ -30,7 +28,7 @@ module Sinatra
 
         named_params = @documentation[@index].named_params
         query_params = @documentation[@index].query_params
-        payload = @documentation[@index].payload
+        payload = @documentation[@index].forms
         all_params = named_params + query_params + payload      # prepares all_params array to validate all at once
 
 

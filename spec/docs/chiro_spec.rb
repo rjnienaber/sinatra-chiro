@@ -84,6 +84,34 @@ describe 'Chiro' do
     end
   end
 
+  context '#form' do
+    it 'documents with defaults' do
+      subject.endpoint do
+        subject.form(:greeting, 'How you want to be greeted')
+      end
+      form = endpoint_doc.forms[0]
+
+      form[:name].should == :greeting
+      form[:description].should == 'How you want to be greeted'
+      form[:type].should == String
+      form[:optional].should be_true
+      form[:default].should be_nil
+    end
+
+    it 'documents with values' do
+      subject.endpoint do
+        subject.form(:people, 'The number of people to be greeted', :type => Fixnum, :default => 1, :optional => true)
+      end
+      form = endpoint_doc.forms[0]
+
+      form[:name].should == :people
+      form[:description].should == 'The number of people to be greeted'
+      form[:type].should == Fixnum
+      form[:optional].should be_true
+      form[:default].should == 1
+    end
+  end
+
   context '#returns' do
     it 'gives examples of what might be returned' do
       subject.endpoint('People greeter') do
