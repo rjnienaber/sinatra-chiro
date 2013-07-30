@@ -6,7 +6,7 @@ module Sinatra
       if params.has_key? "help"
 
         status 200
-        throw :halt, "#{erb :help}"
+        throw :halt, "#{erb(:help, {}, :endpoint => HelloApp.documentation.document(env)) }"
       else
         error = self.class.validator.validate(params, env)
         if error == "not found"

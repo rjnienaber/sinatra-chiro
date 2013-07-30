@@ -2,7 +2,6 @@
 class HelloApp < Sinatra::Base
   register Sinatra::Reloader
   register Sinatra::Chiro
-  require 'pp'
 
   endpoint 'Query string validation tester' do
     query_param(:string, 'parameter of string type', :type => String, :optional => true)
@@ -71,9 +70,6 @@ class HelloApp < Sinatra::Base
     end
   end
 
-
-
-
   endpoint 'String type form parameter validation tester' do
     form(:string, 'parameter of string type', :type => String, :optional => false)
     post '/test/form/string' do
@@ -129,5 +125,4 @@ class HelloApp < Sinatra::Base
       "Valid"
     end
   end
-
 end

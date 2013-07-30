@@ -2,7 +2,6 @@ require 'spec_helper'
 ru_file = File.dirname(__FILE__) + '/../example_apps/config.ru'
 SERVER_APP = Rack::Builder.parse_file(ru_file).first
 
-
 describe 'Server application' do
   def app
     SERVER_APP
@@ -53,7 +52,7 @@ describe 'Server application' do
   end
 
 
-context 'returns validation error' do
+  context 'returns validation error' do
     it 'if extra parameter is included' do
       get '/test/query?extra=value'
       last_response.should be_forbidden

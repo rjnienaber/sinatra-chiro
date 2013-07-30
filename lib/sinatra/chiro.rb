@@ -10,7 +10,7 @@ module Sinatra
     end
 
     def validator
-      @validator ||= MyValidator.new(endpoints)
+      @validator ||= Validation.new(endpoints)
     end
 
     def documentation

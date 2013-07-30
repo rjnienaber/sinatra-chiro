@@ -12,9 +12,8 @@ module Sinatra
         path_array = env['sinatra.route'].split('/')[1..-1]
         endpoint = endpoints.select { |d| d.path.split('/')[1..-1] == path_array}.flatten.first
         raise "Path #{path_array} doesn't have any docs" unless endpoint
-        return endpoint
+        endpoint
       end
-
     end
   end
 end

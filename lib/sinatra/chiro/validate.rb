@@ -1,6 +1,8 @@
+require 'time'
+
 module Sinatra
   module Chiro
-    class MyValidator
+    class Validation
       attr_reader :endpoints
 
       def initialize(endpoints)
@@ -9,11 +11,10 @@ module Sinatra
 
       def validate(params, env)
         path_array = env['sinatra.route'].split('/')[1..-1]
-        errors = []
 
-        endpoint = endpoints.select { |d| d.path.split('/')[1..-1] == path_array}.flatten.first
+        endpoint = endpoints.select { |d| d.path.split('/')[1..-1] == path_array }.flatten.first
 
-        require 'time'
+
         my_params = params.dup
         my_params.delete('captures')
         my_params.delete('splat')
@@ -22,17 +23,18 @@ module Sinatra
         named_params = endpoint.named_params
         query_params = endpoint.query_params
         payload = endpoint.forms
-        all_params = named_params + query_params + payload      # prepares all_params array to validate all at once
+        all_params = named_params + query_params + payload # prepares all_params array to validate all at once
 
 
         allowed_params = []
         given_params = []
+        errors = []
 
         all_params.each do |hash|
           param = hash[:name]
           parameter = param.to_s
 
-# all parameters validated here
+          # all parameters validated here
           unless all_given[parameter] == nil
             if hash[:type] == String
               errors << "#{parameter} parameter must be a string of only letters" if all_given[parameter]!~/^[a-zA-Z]*$/
@@ -48,23 +50,23 @@ module Sinatra
               errors << "#{parameter} parameter must be an Array of Strings" if !all_given[parameter].is_a? Array
 
             elsif hash[:type] == Date
-             errors << "#{parameter} parameter must be a string in the format: yyyy-mm-dd" if all_given[parameter] !~ /^\d{4}-\d{2}-\d{2}$/
-            begin
-              Date.parse("#{all_given[parameter]}")
-            rescue ArgumentError
-              errors << "#{parameter} parameter invalid"
-            end
-
-            elsif hash[:type] == DateTime
-            if all_given[parameter] !~ /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/
-              errors << "#{parameter} parameter must be a string in the format: yyyy-mm-ddThh:mm:ss"
-            else
+              errors << "#{parameter} parameter must be a string in the format: yyyy-mm-dd" if all_given[parameter] !~ /^\d{4}-\d{2}-\d{2}$/
               begin
-                Time.parse("#{all_given[parameter]}")
+                Date.parse("#{all_given[parameter]}")
               rescue ArgumentError
                 errors << "#{parameter} parameter invalid"
               end
-            end
+
+            elsif hash[:type] == DateTime
+              if all_given[parameter] !~ /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/
+                errors << "#{parameter} parameter must be a string in the format: yyyy-mm-ddThh:mm:ss"
+              else
+                begin
+                  Time.parse("#{all_given[parameter]}")
+                rescue ArgumentError
+                  errors << "#{parameter} parameter invalid"
+                end
+              end
 
             elsif hash[:type] == Time
               if all_given[parameter] !~ /^\d{2}:\d{2}:\d{2}$/
@@ -97,16 +99,13 @@ module Sinatra
           given_params << k.to_s
         end
 
-        given_params.each do|param|
+        given_params.each do |param|
           errors << "#{param} is not a valid parameter" if !allowed_params.include?(param)
         end
 
         if !errors.empty? then
-          return errors.join('<br>')              # if there are errors return them!
-        else
-          return nil
+          errors.join('<br>') # if there are errors return them!
         end
-
       end
     end
   end
