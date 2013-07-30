@@ -8,18 +8,10 @@ module Sinatra
       end
 
       def validate(params, env)
-
-        _, url = env['sinatra.route'].split('/')
-        path_array = env['sinatra.route'].split('/')
+        path_array = env['sinatra.route'].split('/')[1..-1]
         errors = []
-        @index = nil
 
-
-        endpoints.map.with_index.to_a.each do |endpoint, index|    # gives each endpoint an index and iterates
-          if path_array[1..-1] == endpoint.path.split('/')[1..-1]                         # matches endpoint path to url
-            @index = index                      # assigns @index the value of the endpoint with the appropriate path
-          end
-        end
+        endpoint = endpoints.select { |d| d.path.split('/')[1..-1] == path_array}.flatten.first
 
         require 'time'
         my_params = params.dup
@@ -27,9 +19,9 @@ module Sinatra
         my_params.delete('splat')
         all_given = my_params
 
-        named_params = endpoints[@index].named_params
-        query_params = endpoints[@index].query_params
-        payload = endpoints[@index].forms
+        named_params = endpoint.named_params
+        query_params = endpoint.query_params
+        payload = endpoint.forms
         all_params = named_params + query_params + payload      # prepares all_params array to validate all at once
 
 

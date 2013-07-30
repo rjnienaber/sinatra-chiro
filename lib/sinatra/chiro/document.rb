@@ -10,8 +10,12 @@ module Sinatra
 
       def show(env)
         _, url = env['sinatra.route'].split('/')
-        endpoint = endpoints.select { |d| d.path.include?(url) }.flatten.first
+        path_array = env['sinatra.route'].split('/')[1..-1]
+        endpoint = endpoints.select { |d| d.path.split('/')[1..-1] == path_array}.flatten.first
         raise "Path #{url} doesn't have any docs" unless endpoint
+
+        p endpoint.path.split('/')[1..-1]
+        p path_array
 
         response_body = endpoint.to_json
 
