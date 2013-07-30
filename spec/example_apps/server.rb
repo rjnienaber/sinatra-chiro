@@ -18,7 +18,9 @@ class HelloApp < Sinatra::Base
     end
   end
 
-
+  get '/test' do
+    'Hello World'
+  end
 
   endpoint 'String named parameter validation tester' do
     named_param(:string, 'parameter of string type', :type => String, :optional => true)
