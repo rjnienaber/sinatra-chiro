@@ -1,0 +1,18 @@
+<%= HelloApp.documentation.show(env) %>
+
+<h2><%= HelloApp.documentation.post(env) %> - <%= HelloApp.documentation.path(env) %></h2>
+
+<p><%= HelloApp.documentation.description(env) %></p>
+
+<p>
+<h3>Named Parameters:</h3>
+  <%= HelloApp.documentation.named(env) %>
+</p>
+<p>
+<h3>Query String Parameters:</h3>
+  <%= HelloApp.documentation.query(env) %>
+</p>
+<p>
+<h3>Form Parameters:</h3>
+  <%= HelloApp.documentation.form(env) %>
+</p>

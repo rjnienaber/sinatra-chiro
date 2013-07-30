@@ -9,20 +9,19 @@ module Sinatra
 
       def validate(params, env)
 
-        require 'pp'
-
         _, url = env['sinatra.route'].split('/')
+        path_array = env['sinatra.route'].split('/')
         errors = []
         @index = nil
 
+
         endpoints.map.with_index.to_a.each do |endpoint, index|    # gives each endpoint an index and iterates
-          if url == endpoint.path.split('/')[1]                         # matches endpoint path to url
+          if path_array[1..-1] == endpoint.path.split('/')[1..-1]                         # matches endpoint path to url
             @index = index                      # assigns @index the value of the endpoint with the appropriate path
           end
         end
 
         require 'time'
-
         my_params = params.dup
         my_params.delete('captures')
         my_params.delete('splat')
@@ -65,19 +64,25 @@ module Sinatra
             end
 
             elsif hash[:type] == DateTime
-            errors << "#{parameter} parameter must be a string in the format: yyyy-mm-ddThh:mm:ss" if all_given[parameter] !~ /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/
-            begin
-              Time.parse("#{all_given[parameter]}")
-            rescue ArgumentError
-              errors << "#{parameter} parameter invalid"
-            end
-
-            elsif hash[:type] == Time
-              errors << "#{parameter} parameter must be a string in the format: hh:mm:ss" if all_given[parameter] !~ /^\d{2}:\d{2}:\d{2}$/
+            if all_given[parameter] !~ /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/
+              errors << "#{parameter} parameter must be a string in the format: yyyy-mm-ddThh:mm:ss"
+            else
               begin
                 Time.parse("#{all_given[parameter]}")
               rescue ArgumentError
                 errors << "#{parameter} parameter invalid"
+              end
+            end
+
+            elsif hash[:type] == Time
+              if all_given[parameter] !~ /^\d{2}:\d{2}:\d{2}$/
+                errors << "#{parameter} parameter must be a string in the format: hh:mm:ss"
+              else
+                begin
+                  Time.parse("#{all_given[parameter]}")
+                rescue ArgumentError
+                  errors << "#{parameter} parameter invalid"
+                end
               end
 
             elsif hash[:type] == :boolean
@@ -85,7 +90,7 @@ module Sinatra
             end
 
             if hash[:type].is_a? Regexp
-              errors << "#{parameter} parameter should match regex: #{hash[:type]}" if all_given[parameter] !~ hash[:type]
+              errors << "#{parameter} parameter should match regexp: #{hash[:type]}" if all_given[parameter] !~ hash[:type]
             end
           end
 

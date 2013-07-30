@@ -29,6 +29,7 @@ class Endpoint
      :query_params => query_params,
      :forms => forms,
      :returns => returns,
-     :opts => opts}.to_json
+     #:opts => opts
+     }.to_json
   end
 end

@@ -4,9 +4,9 @@ module Sinatra
     alias_method :old_route_eval, :route_eval
     def route_eval
       if params.has_key? "help"
-        help = self.class.documentation.show(env)
+
         status 200
-        throw :halt, "#{help}"
+        throw :halt, "#{erb :help}"
       else
         error = self.class.validator.validate(params, env)
         if error == "not found"
