@@ -1,7 +1,6 @@
-<h2><%= endpoint = HelloApp.documentation.document(env)
-        "#{endpoint.route}" %></h2>
+<h2><%= endpoint.route %></h2>
 
-<%= "#{endpoint.description}" %>
+<%= endpoint.description %>
 
 <% if !endpoint.query_params.empty? %>
     <h3>Query String Parameters:</h3>
