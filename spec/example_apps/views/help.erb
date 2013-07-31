@@ -3,57 +3,62 @@
 
 <%= "#{endpoint.description}" %>
 
-<h3>Query String Parameters:</h3>
-<table>
-  <tr>
-    <td>Name</td>
-    <td>Description</td>
-    <td>Type</td>
-    <td>Optional</td>
-  </tr>
-  <% endpoint.query_params.each do |p| %>
-  <tr>
-    <td><%= p[:name] %></td>
-    <td><%= p[:description] %></td>
-    <td><%= p[:type] %></td>
-    <td><%= p[:optional] %></td>
-  </tr>
-  <% end %>
-</table>
-
-<h3>Named Parameters:</h3>
-<table>
-  <tr>
-    <td>Name</td>
-    <td>Description</td>
-    <td>Type</td>
-    <td>Optional</td>
-  </tr>
-  <% endpoint.named_params.each do |p| %>
+<% if !endpoint.query_params.empty? %>
+    <h3>Query String Parameters:</h3>
+    <table>
+      <tr>
+        <td>Name</td>
+        <td>Description</td>
+        <td>Type</td>
+        <td>Optional</td>
+      </tr>
+      <% endpoint.query_params.each do |p| %>
       <tr>
         <td><%= p[:name] %></td>
         <td><%= p[:description] %></td>
         <td><%= p[:type] %></td>
         <td><%= p[:optional] %></td>
       </tr>
-  <% end %>
-</table>
+      <% end %>
+    </table>
+<% end %>
 
-<h3>Form Parameters:</h3>
-<table>
-
-  <tr>
-    <td>Name</td>
-    <td>Description</td>
-    <td>Type</td>
-    <td>Optional</td>
-  </tr>
-  <% endpoint.forms.each do |p| %>
+<% if !endpoint.named_params.empty? %>
+    <h3>Named Parameters:</h3>
+    <table>
       <tr>
-        <td><%= p[:name] %></td>
-        <td><%= p[:description] %></td>
-        <td><%= p[:type] %></td>
-        <td><%= p[:optional] %></td>
+        <td>Name</td>
+        <td>Description</td>
+        <td>Type</td>
+        <td>Optional</td>
       </tr>
-  <% end %>
-</table>
+      <% endpoint.named_params.each do |p| %>
+          <tr>
+            <td><%= p[:name] %></td>
+            <td><%= p[:description] %></td>
+            <td><%= p[:type] %></td>
+            <td><%= p[:optional] %></td>
+          </tr>
+      <% end %>
+    </table>
+<% end %>
+
+<% if !endpoint.named_params.empty? %>
+    <h3>Form Parameters:</h3>
+    <table>
+      <tr>
+        <td>Name</td>
+        <td>Description</td>
+        <td>Type</td>
+        <td>Optional</td>
+      </tr>
+      <% endpoint.forms.each do |p| %>
+          <tr>
+            <td><%= p[:name] %></td>
+            <td><%= p[:description] %></td>
+            <td><%= p[:type] %></td>
+            <td><%= p[:optional] %></td>
+          </tr>
+      <% end %>
+    </table>
+<% end %>
