@@ -4,17 +4,18 @@ module Sinatra
     alias_method :old_route_eval, :route_eval
     def route_eval
       if params.has_key? "help"
-
         status 200
-        throw :halt, "#{erb(:help, {}, :endpoint => HelloApp.documentation.document(env)) }"
+        throw :halt, "#{erb(:help, {}, :endpoint => self.class.documentation.document(env)) }"
       else
-        error = self.class.validator.validate(params, env)
-        if error == "not found"
-          status 404
-          throw :halt, "Path not found"
-        elsif error!= nil
-          status 403
-          throw :halt, "#{error}"
+        if self.class.respond_to?(:validator)
+          error = self.class.validator.validate(params, env)
+          if error == "not found"
+            status 404
+            throw :halt, "Path not found"
+          elsif error!= nil
+            status 403
+            throw :halt, "#{error}"
+          end
         end
       end
 

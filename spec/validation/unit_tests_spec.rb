@@ -2,6 +2,30 @@ require 'spec_helper'
 ru_file = File.dirname(__FILE__) + '/../example_apps/config.ru'
 SERVER_APP = Rack::Builder.parse_file(ru_file).first
 
+describe 'Other Application' do
+  def app
+    SERVER_APP
+  end
+  it 'greets a user using other app' do
+    get '/hi' do
+      last_response.should be_ok
+      last_response.body.should == "Hello World!"
+    end
+  end
+end
+
+describe 'Other Application' do
+  def app
+    SERVER_APP
+  end
+  it 'greets a user using classic app' do
+    get '/hey' do
+      last_response.should be_ok
+      last_response.body.should == "Classic world!"
+    end
+  end
+end
+
 describe 'Server application' do
   def app
     SERVER_APP
@@ -37,7 +61,7 @@ describe 'Server application' do
     #tests to ensure repeated parameters in query string are ignored
 
     it 'when multiple query string parameters entered correctly' do
-      get 'test/query?fixnum=12&string=hello&float=1.5&date=1999-12-12&time=12:33:11&datetime=1223-12-12T12:00:00&boolean=false&array[]=hello&array[]=howdy'
+      get 'test/query?fixnum=12&string=hello&float=1.5&date=1999-12-12&time=12:33:11&datetime=1223-12-12T12:00:00&boolean=false&array[]=hello&array[]=howdy&gender=male'
       last_response.should be_ok
       last_response.body.should == 'Valid'
     end
@@ -53,6 +77,7 @@ describe 'Server application' do
 
 
   context 'returns validation error' do
+
     it 'if extra parameter is included' do
       get '/test/query?extra=value'
       last_response.should be_forbidden
@@ -66,6 +91,7 @@ describe 'Server application' do
 
     it 'if invalid regexp' do
       post '/test/form/gender', {:gender => 'robot'}
+      last_response.should be_forbidden
       last_response.body.should == "gender parameter should match regexp: (?-mix:^male$|^female$)"
     end
 
@@ -106,7 +132,7 @@ describe 'Server application' do
     end
 
     it 'when extra post parameter given' do
-       post '/test/form/boolean', {:boolean => 'true', :unlucky => 13}
+      post '/test/form/boolean', {:boolean => 'true', :unlucky => 13}
       last_response.should be_forbidden
       last_response.body.should == 'unlucky is not a valid parameter'
     end

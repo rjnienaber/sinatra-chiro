@@ -9,12 +9,39 @@ module Sinatra
       end
 
       def document(env)
-        path_array = env['sinatra.route'].split('/')[1..-1]
-        endpoint = endpoints.select { |d| d.path.split('/')[1..-1] == path_array}.flatten.first
-        raise "Path #{path_array} doesn't have any docs" unless endpoint
-        endpoint
+        _, path = env['sinatra.route'].split
+        endpoint = endpoints.select { |d| d.path == path}.flatten.first
+
+        raise "Path #{path} doesn't have any docs" unless endpoint
+
+        [endpoint.query_params, endpoint.named_params, endpoint.forms].each do |param|
+          param.each do |hash|
+            commenter = hash[:commenter]
+            hash[:comment] = commenter.comment(hash[:type]) unless commenter.nil?
+          end
+        end
+
+        [endpoint]
       end
+
+
+      def routes(env)
+        _, path = env['sinatra.route'].split
+
+        endpoints.each do |endpoint|
+          [endpoint.query_params, endpoint.named_params, endpoint.forms].each do |param|
+            param.each do |hash|
+              commenter = hash[:commenter]
+              hash[:comment] = commenter.comment(hash[:type]) unless commenter.nil?
+            end
+          end
+        end
+
+        endpoints
+      end
+
     end
   end
 end
+
 

@@ -1,3 +1,6 @@
+
+<% endpoint.each do |endpoint| %>
+
 <h2><%= endpoint.route %></h2>
 
 <%= endpoint.description %>
@@ -10,13 +13,15 @@
         <td>Description</td>
         <td>Type</td>
         <td>Optional</td>
+        <td>Comment</td>
       </tr>
       <% endpoint.query_params.each do |p| %>
       <tr>
-        <td><%= p[:name] %></td>
-        <td><%= p[:description] %></td>
-        <td><%= p[:type] %></td>
-        <td><%= p[:optional] %></td>
+            <td><%= p[:name] %></td>
+            <td><%= p[:description] %></td>
+            <td><%= p[:type] %></td>
+            <td><%= p[:optional] %></td>
+            <td><%= p[:comment] %></td>
       </tr>
       <% end %>
     </table>
@@ -30,6 +35,7 @@
         <td>Description</td>
         <td>Type</td>
         <td>Optional</td>
+        <td>Comment</td>
       </tr>
       <% endpoint.named_params.each do |p| %>
           <tr>
@@ -37,12 +43,13 @@
             <td><%= p[:description] %></td>
             <td><%= p[:type] %></td>
             <td><%= p[:optional] %></td>
+            <td><%= p[:comment] %></td>
           </tr>
       <% end %>
     </table>
 <% end %>
 
-<% if !endpoint.named_params.empty? %>
+<% if !endpoint.forms.empty? %>
     <h3>Form Parameters:</h3>
     <table>
       <tr>
@@ -50,6 +57,7 @@
         <td>Description</td>
         <td>Type</td>
         <td>Optional</td>
+        <td>Comment</td>
       </tr>
       <% endpoint.forms.each do |p| %>
           <tr>
@@ -57,7 +65,10 @@
             <td><%= p[:description] %></td>
             <td><%= p[:type] %></td>
             <td><%= p[:optional] %></td>
+            <td><%= p[:comment] %></td>
           </tr>
       <% end %>
     </table>
 <% end %>
+
+<%end%>
