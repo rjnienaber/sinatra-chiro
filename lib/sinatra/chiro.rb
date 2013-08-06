@@ -2,7 +2,7 @@ require 'sinatra/chiro/endpoint'
 require 'sinatra/chiro/document'
 require 'sinatra/chiro/validate'
 require 'sinatra/chiro/monkey_patch'
-Dir[File.dirname(__FILE__) + '/chiro/parameters/*.rb'].each { |f| require f}
+Dir[File.dirname(__FILE__) + '/chiro/parameters/*.rb'].sort.each { |f| require f}
 
 module Sinatra
   module Chiro
@@ -41,29 +41,24 @@ module Sinatra
     end
 
     def named_param(name, description, opts={})
-      opts[:optional] = false
+      opts.merge!(:name => name, :description => description, :optional => false)
       Chiro.remove_unknown_param_keys(opts)
       Chiro.set_param_defaults(opts)
-      validator = Parameters::ParameterFactory.validator_from_type(opts[:type])
-      commenter = Parameters::ParameterFactory.commenter_from_type(opts[:type])
-      @named_params << {:name => name, :description => description, :validator => validator, :commenter => commenter}.merge(opts)
+      @named_params << Parameters::ParameterFactory.validator_from_type(opts)
     end
 
     def form(name, description, opts={})
-      opts[:optional] = true
+      opts.merge!(:name => name, :description => description, :optional => true )
       Chiro.remove_unknown_param_keys(opts)
       Chiro.set_param_defaults(opts)
-      validator = Parameters::ParameterFactory.validator_from_type(opts[:type])
-      commenter = Parameters::ParameterFactory.commenter_from_type(opts[:type])
-      @forms << {:name => name, :description => description, :validator => validator, :commenter => commenter}.merge(opts)
+      @forms << Parameters::ParameterFactory.validator_from_type(opts)
+
     end
 
     def query_param(name, description, opts={})
-      Chiro.remove_unknown_param_keys(opts)
+      opts.merge!(:name => name, :description => description)
       Chiro.set_param_defaults(opts)
-      validator = Parameters::ParameterFactory.validator_from_type(opts[:type])
-      commenter = Parameters::ParameterFactory.commenter_from_type(opts[:type])
-      @query_params << {:name => name, :description => description, :validator => validator, :commenter => commenter}.merge(opts)
+      @query_params << Parameters::ParameterFactory.validator_from_type(opts)
     end
 
     def possible_error(name, code, description)
@@ -88,13 +83,13 @@ module Sinatra
 
     def self.registered(app)
       app.get '/routes' do
-        erb(:help, {}, :endpoint => app.documentation.routes(env))
+       # erb(:help, {}, :endpoint => app.documentation.routes(env))
       end
     end
 
     private
     def self.remove_unknown_param_keys(opts)
-      known_options = [:default, :type, :optional, :validator, :commenter, :comment]
+      known_options = [:name, :description, :default, :type, :optional, :validator]
       opts.delete_if { |k| !k.is_a?(Symbol) || !known_options.include?(k)}
     end
 

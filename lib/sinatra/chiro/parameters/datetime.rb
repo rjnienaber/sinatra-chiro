@@ -1,17 +1,17 @@
 module Sinatra
   module Chiro
     module Parameters
-      class DateTimeValidator
-        def validate(given, hash)
+      class DateTimeValidator < Base
+        def validate(given)
           begin
             DateTime.parse("#{given}")
           rescue ArgumentError
             @err = true
           end
           if @err
-            "#{hash[:name].to_s} parameter invalid"
-          elsif given !~ /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/
-            "#{hash[:name].to_s} parameter must be a string in the format: yyyy-mm-ddThh:mm:ss"
+            "#{options[:name].to_s} parameter invalid"
+          elsif  given[options[:name]] !~ /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}$/
+            "#{options[:name].to_s} parameter must be a string in the format: yyyy-mm-ddThh:mm:ss"
           else
             nil
           end

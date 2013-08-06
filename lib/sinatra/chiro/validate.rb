@@ -33,15 +33,16 @@ module Sinatra
           given_params = []
           errors = []
 
-          all_params.each do |hash|
-            validator = hash[:validator]
-            unless all_given[hash[:name].to_s] == nil
-                errors << validator.validate(all_given[hash[:name].to_s], hash)
+          all_params.each do |object|
+
+            unless all_given[object.options[:name].to_s] == nil
+                errors << object.validate(all_given)
             end
-            if !hash[:optional]
-              errors << "must include a #{hash[:name].to_s} parameter" if all_given[hash[:name].to_s] == nil
+            if !object.options[:optional]
+              errors << "must include a #{object.options[:name].to_s} parameter" if all_given[object.options[:name].to_s] == nil
             end
-            allowed_params << hash[:name].to_s
+
+            allowed_params << object.options[:name].to_s
           end
 
           all_given.each do |k, v|

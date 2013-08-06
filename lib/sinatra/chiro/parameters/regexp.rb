@@ -1,13 +1,14 @@
 module Sinatra
   module Chiro
     module Parameters
-      class RegexpValidator
-        def validate(given, hash)
-          "#{hash[:name].to_s} parameter should match regexp: #{hash[:type]}" if given !~ hash[:type]
+      class RegexpValidator < Base
+
+        def validate(given)
+          "#{options[:name].to_s} parameter should match regexp: #{options[:type]}" if given[options[:name]] !~ options[:type]
         end
 
         def type_description
-          'Regexp'
+          "Regexp"
         end
 
         def comment(type)

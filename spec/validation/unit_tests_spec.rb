@@ -128,11 +128,11 @@ describe 'Server application' do
     it 'when boolean is neither true or false' do
       post '/test/form/boolean', {:boolean => 'untrue'}
       last_response.should be_forbidden
-      last_response.body.should == 'boolean parameter must be a boolean'
+      last_response.body.should == 'boolean parameter must be true or false'
     end
 
     it 'when extra post parameter given' do
-      post '/test/form/boolean', {:boolean => 'true', :unlucky => 13}
+      post '/test/form/string', {:string => 'word', :unlucky => 13}
       last_response.should be_forbidden
       last_response.body.should == 'unlucky is not a valid parameter'
     end

@@ -1,12 +1,12 @@
 module Sinatra
   module Chiro
     module Parameters
-      class BooleanValidator
-        def validate(given, hash)
-          if (given=="true" or given=="false")
+      class BooleanValidator < Base
+        def validate(given)
+          if (given[options[:name]]=="true" or given[options[:name]]=="false")
             nil
           else
-            "#{hash[:name].to_s} parameter must be a boolean"
+            "#{options[:name].to_s} parameter must be true or false"
           end
         end
 
