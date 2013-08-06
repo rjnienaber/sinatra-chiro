@@ -2,6 +2,7 @@ require 'sinatra/chiro/endpoint'
 require 'sinatra/chiro/document'
 require 'sinatra/chiro/validate'
 require 'sinatra/chiro/monkey_patch'
+require 'pp'
 Dir[File.dirname(__FILE__) + '/chiro/parameters/*.rb'].sort.each { |f| require f}
 
 module Sinatra
@@ -89,7 +90,7 @@ module Sinatra
 
     private
     def self.remove_unknown_param_keys(opts)
-      known_options = [:name, :description, :default, :type, :optional, :validator, :comment]
+      known_options = [:name, :description, :default, :type, :optional, :validator, :comment, :type_description]
       opts.delete_if { |k| !k.is_a?(Symbol) || !known_options.include?(k)}
     end
 

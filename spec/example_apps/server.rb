@@ -12,7 +12,7 @@ class HelloApp < Sinatra::Base
     query_param(:datetime, 'arbitrary parameter of datetime type', :type => DateTime, :optional => true)
     query_param(:boolean, 'arbitrary parameter of boolean type', :type => :boolean, :optional => true)
     query_param(:array, 'array of extra parameters', :type => Array[String], :optional => true)
-    query_param(:gender, 'gender parameter of regexp type', :type => /^male$|^female$/, :optional => true, :comment => 'Must be "male" or "female"')
+    query_param(:gender, 'gender parameter of regexp type', :type => /^male$|^female$/, :optional => true, :type_description => "male|female", :comment => 'Must be "male" or "female"')
     possible_error('invalid_request_error', 400, 'Invalid request errors arise when your request has invalid parameters')
     response({:string => 'Richard', :date => '1981-01-01', :time => '12:00:00', :fixnum => 24, :float => 1.2, :array => [1,2,3,4,5]})
 

@@ -8,7 +8,7 @@ module Sinatra
         end
 
         def type_description
-          "Regexp"
+          options[:type_description] || "Regexp"
         end
 
         def comment
