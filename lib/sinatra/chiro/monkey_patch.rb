@@ -4,8 +4,10 @@ module Sinatra
     alias_method :old_route_eval, :route_eval
     def route_eval
       if params.has_key? "help"
-        status 200
-        throw :halt, "#{erb(:help, {}, :endpoint => self.class.documentation.document(env)) }"
+        if self.class.respond_to?(:validator)
+          status 200
+          throw :halt, "#{erb(:help, {}, :endpoint => self.class.documentation.document(env)) }"
+        end
       else
         if self.class.respond_to?(:validator)
           error = self.class.validator.validate(params, env)
@@ -23,3 +25,4 @@ module Sinatra
     end
   end
 end
+

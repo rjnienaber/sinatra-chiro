@@ -39,7 +39,6 @@ module Sinatra
 
         endpoints
       end
-
     end
   end
 end

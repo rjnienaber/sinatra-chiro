@@ -1,74 +1,106 @@
-
 <% endpoint.each do |endpoint| %>
 
-<h2><%= endpoint.route %></h2>
 
-<%= endpoint.description %>
 
-<% if !endpoint.query_params.empty? %>
-    <h3>Query String Parameters:</h3>
-    <table>
-      <tr>
-        <td>Name</td>
-        <td>Description</td>
-        <td>Type</td>
-        <td>Optional</td>
-        <td>Comment</td>
-      </tr>
-      <% endpoint.query_params.each do |p| %>
-      <tr>
-            <td><%= p[:name] %></td>
-            <td><%= p[:description] %></td>
-            <td><%= p[:type] %></td>
-            <td><%= p[:optional] %></td>
-            <td><%= p[:comment] %></td>
-      </tr>
-      <% end %>
-    </table>
-<% end %>
+    <h2><%= endpoint.route %></h2>
 
-<% if !endpoint.named_params.empty? %>
-    <h3>Named Parameters:</h3>
-    <table>
-      <tr>
-        <td>Name</td>
-        <td>Description</td>
-        <td>Type</td>
-        <td>Optional</td>
-        <td>Comment</td>
-      </tr>
-      <% endpoint.named_params.each do |p| %>
+    <%= endpoint.to_json %>
+    <% require 'pp' %>
+
+    <%= endpoint.description%>
+
+    <% if !endpoint.query_params.empty? %>
+        <h3>Query String Parameters:</h3>
+        <table>
           <tr>
-            <td><%= p[:name] %></td>
-            <td><%= p[:description] %></td>
-            <td><%= p[:type] %></td>
-            <td><%= p[:optional] %></td>
-            <td><%= p[:comment] %></td>
+            <td>Name</td>
+            <td>Description</td>
+            <td>Type</td>
+            <td>Optional</td>
+            <td>Comment</td>
           </tr>
-      <% end %>
-    </table>
-<% end %>
+          <% endpoint.query_params.each do |p| %>
+              <tr>
+                <td><%= p[:name] %></td>
+                <td><%= p[:description] %></td>
+                <td><%= p[:type] %></td>
+                <td><%= p[:optional] %></td>
+                <td><%= p[:comment] %></td>
+              </tr>
+          <% end %>
+        </table>
+    <% end %>
 
-<% if !endpoint.forms.empty? %>
-    <h3>Form Parameters:</h3>
-    <table>
-      <tr>
-        <td>Name</td>
-        <td>Description</td>
-        <td>Type</td>
-        <td>Optional</td>
-        <td>Comment</td>
-      </tr>
-      <% endpoint.forms.each do |p| %>
+    <% if !endpoint.named_params.empty? %>
+        <h3>Named Parameters:</h3>
+        <table>
           <tr>
-            <td><%= p[:name] %></td>
-            <td><%= p[:description] %></td>
-            <td><%= p[:type] %></td>
-            <td><%= p[:optional] %></td>
-            <td><%= p[:comment] %></td>
+            <td>Name</td>
+            <td>Description</td>
+            <td>Type</td>
+            <td>Optional</td>
+            <td>Comment</td>
           </tr>
-      <% end %>
-    </table>
-<% end %>
+          <% endpoint.named_params.each do |p| %>
+              <tr>
+                <td><%= p[:name] %></td>
+                <td><%= p[:description] %></td>
+                <td><%= p[:type] %></td>
+                <td><%= p[:optional] %></td>
+                <td><%= p[:comment] %></td>
+              </tr>
+          <% end %>
+        </table>
+    <% end %>
 
-<%end%>
+    <% if !endpoint.forms.empty? %>
+        <h3>Form Parameters:</h3>
+        <table>
+          <tr>
+            <td>Name</td>
+            <td>Description</td>
+            <td>Type</td>
+            <td>Optional</td>
+            <td>Comment</td>
+          </tr>
+          <% endpoint.forms.each do |p| %>
+              <tr>
+                <td><%= p[:name] %></td>
+                <td><%= p[:description] %></td>
+                <td><%= p[:type] %></td>
+                <td><%= p[:optional] %></td>
+                <td><%= p[:comment] %></td>
+              </tr>
+          <% end %>
+        </table>
+    <% end %>
+
+    <% if !endpoint.possible_errors.empty? %>
+        <h3>Possible Errors:</h3>
+        <table>
+          <tr>
+            <td>Name</td>
+            <td>Code</td>
+            <td>Description</td>
+          </tr>
+          <% endpoint.possible_errors.each do |p| %>
+              <tr>
+                <td><%= p[:name] %></td>
+                <td><%= p[:code] %></td>
+                <td><%= p[:description] %></td>
+              </tr>
+          <% end %>
+        </table>
+    <% end %>
+
+    <% if !endpoint.response.nil? %>
+        <h3>Response:</h3>
+        { <br>
+        <% endpoint.response.each do |k, v| %>
+            &nbsp &nbsp<%= PP.pp(k.to_s, "") %>: <%= PP.pp(v, "") %> <br>
+        <% end %>
+        }
+
+    <% end %>
+
+<% end %>

@@ -25,6 +25,8 @@ module Sinatra
       @named_params = []
       @query_params = []
       @forms = []
+      @possible_errors = []
+      @response = nil
 
       yield
 
@@ -32,7 +34,8 @@ module Sinatra
       opts[:named_params] = @named_params
       opts[:query_params] = @query_params
       opts[:forms] = @forms
-      opts[:returns] = @returns
+      opts[:possible_errors] = @possible_errors
+      opts[:response] = @response
       opts[:path] = @path
       endpoints << Endpoint.new(opts)
     end
@@ -63,6 +66,10 @@ module Sinatra
       @query_params << {:name => name, :description => description, :validator => validator, :commenter => commenter}.merge(opts)
     end
 
+    def possible_error(name, code, description)
+      @possible_errors << {:name => name, :code => code, :description => description}
+    end
+
     def get(path, opts = {}, &block)
       @path = path
       @verb = :GET
@@ -75,8 +82,8 @@ module Sinatra
       super
     end
 
-    def returns(result)
-      @returns = result
+    def response(result)
+      @response = result
     end
 
     def self.registered(app)

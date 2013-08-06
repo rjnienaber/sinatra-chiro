@@ -107,9 +107,9 @@ describe 'Chiro' do
   context '#returns' do
     it 'gives examples of what might be returned' do
       subject.endpoint('People greeter') do
-        subject.returns('e.g. Hello world')
+        subject.response('e.g. Hello world')
       end
-      endpoint_doc.returns.should == 'e.g. Hello world'
+      endpoint_doc.response.should == 'e.g. Hello world'
     end
   end
 end
