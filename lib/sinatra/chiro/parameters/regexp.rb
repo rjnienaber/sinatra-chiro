@@ -11,8 +11,8 @@ module Sinatra
           "Regexp"
         end
 
-        def comment(type)
-          "Must match regular expression: #{type}"
+        def comment
+          "#{options[:comment]}"
         end
 
       end

@@ -26,7 +26,7 @@ module Sinatra
           named_params = endpoint.named_params
           query_params = endpoint.query_params
           forms = endpoint.forms
-          all_params = named_params + query_params + forms # prepares all_params array to validate all at once
+          all_params = named_params + query_params + forms
 
 
           allowed_params = []
@@ -34,14 +34,12 @@ module Sinatra
           errors = []
 
           all_params.each do |object|
-
             unless all_given[object.options[:name].to_s] == nil
                 errors << object.validate(all_given)
             end
             if !object.options[:optional]
               errors << "must include a #{object.options[:name].to_s} parameter" if all_given[object.options[:name].to_s] == nil
             end
-
             allowed_params << object.options[:name].to_s
           end
 
@@ -53,9 +51,8 @@ module Sinatra
             errors << "#{param} is not a valid parameter" if !allowed_params.include?(param)
           end
 
-
           if !errors.compact.empty? then
-            errors.compact.join('<br>') # if there are errors return them!
+            errors.compact.join('<br>')
           end
 
         end

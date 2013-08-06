@@ -3,8 +3,6 @@
 
 
     <h2><%= endpoint.route %></h2>
-
-    <%= endpoint.to_json %>
     <% require 'pp' %>
 
     <%= endpoint.description%>
@@ -21,11 +19,11 @@
           </tr>
           <% endpoint.query_params.each do |p| %>
               <tr>
-                <td><%= p[:name] %></td>
-                <td><%= p[:description] %></td>
-                <td><%= p[:type] %></td>
-                <td><%= p[:optional] %></td>
-                <td><%= p[:comment] %></td>
+                <td><%= p.name %></td>
+                <td><%= p.description %></td>
+                <td><%= p.type_description %></td>
+                <td><%= p.optional %></td>
+                <td><%= p.comment %></td>
               </tr>
           <% end %>
         </table>
@@ -43,11 +41,11 @@
           </tr>
           <% endpoint.named_params.each do |p| %>
               <tr>
-                <td><%= p[:name] %></td>
-                <td><%= p[:description] %></td>
-                <td><%= p[:type] %></td>
-                <td><%= p[:optional] %></td>
-                <td><%= p[:comment] %></td>
+                <td><%= p.name %></td>
+                <td><%= p.description %></td>
+                <td><%= p.type_description %></td>
+                <td><%= p.optional %></td>
+                <td><%= p.comment %></td>
               </tr>
           <% end %>
         </table>
@@ -65,11 +63,11 @@
           </tr>
           <% endpoint.forms.each do |p| %>
               <tr>
-                <td><%= p[:name] %></td>
-                <td><%= p[:description] %></td>
-                <td><%= p[:type] %></td>
-                <td><%= p[:optional] %></td>
-                <td><%= p[:comment] %></td>
+                <td><%= p.name %></td>
+                <td><%= p.description %></td>
+                <td><%= p.type_description %></td>
+                <td><%= p.optional %></td>
+                <td><%= p.comment %></td>
               </tr>
           <% end %>
         </table>

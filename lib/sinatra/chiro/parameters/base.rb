@@ -15,6 +15,10 @@ module Sinatra
           @options[:description]
         end
 
+        def comment
+          nil
+        end
+
         def type_description
           @options[:type]
         end

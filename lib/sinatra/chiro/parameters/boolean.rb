@@ -10,7 +10,7 @@ module Sinatra
           end
         end
 
-        def comment(type)
+        def comment
           "Must be true or false"
         end
       end

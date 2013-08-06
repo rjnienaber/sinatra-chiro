@@ -17,7 +17,7 @@ module Sinatra
           end
         end
 
-        def comment(type)
+        def comment
           'Must be expressed according to ISO 8601 (ie. hh:mm:ss)'
         end
       end

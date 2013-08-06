@@ -83,13 +83,13 @@ module Sinatra
 
     def self.registered(app)
       app.get '/routes' do
-       # erb(:help, {}, :endpoint => app.documentation.routes(env))
+        erb(:help, {}, :endpoint => app.documentation.routes(env))
       end
     end
 
     private
     def self.remove_unknown_param_keys(opts)
-      known_options = [:name, :description, :default, :type, :optional, :validator]
+      known_options = [:name, :description, :default, :type, :optional, :validator, :comment]
       opts.delete_if { |k| !k.is_a?(Symbol) || !known_options.include?(k)}
     end
 
