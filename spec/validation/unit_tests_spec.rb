@@ -81,7 +81,13 @@ describe 'Server application' do
     it 'if extra parameter is included' do
       get '/test/query?extra=value'
       last_response.should be_forbidden
-      last_response.body.should == "extra is not a valid parameter"
+      last_response.body.should == '{"validation_errors":["extra is not a valid parameter"]}'
+    end
+
+    it 'if multiple validation errors' do
+      get '/test/query?gender=mangirl&coding=banter'
+      last_response.should be_forbidden
+      last_response.body.should == '{"validation_errors":["gender parameter should match regexp: (?-mix:^male$|^female$)","coding is not a valid parameter"]}'
     end
 
     it 'when path entered incorrectly' do
@@ -92,49 +98,49 @@ describe 'Server application' do
     it 'if invalid regexp' do
       post '/test/form/gender', {:gender => 'robot'}
       last_response.should be_forbidden
-      last_response.body.should == "gender parameter should match regexp: (?-mix:^male$|^female$)"
+      last_response.body.should == '{"validation_errors":["gender parameter should match regexp: (?-mix:^male$|^female$)"]}'
     end
 
     it 'if string named parameter is invalid' do
       get '/test/named/string/45'
       last_response.should be_forbidden
-      last_response.body.should == "string parameter must be a string of only letters"
+      last_response.body.should == '{"validation_errors":["string parameter must be a string of only letters"]}'
     end
 
     it 'if date in wrong format' do
       get '/test/named/date/1233-12-12T12:00:00'
       last_response.should be_forbidden
-      last_response.body.should == "date parameter must be a string in the format: yyyy-mm-dd"
+      last_response.body.should == '{"validation_errors":["date parameter must be a string in the format: yyyy-mm-dd"]}'
     end
 
     it 'if datetime in wrong format' do
       get '/test/query?datetime[]=1233-12-12T12:00:00'
       last_response.should be_forbidden
-      last_response.body.should == "datetime parameter must be a string in the format: yyyy-mm-ddThh:mm:ss"
+      last_response.body.should == '{"validation_errors":["datetime parameter must be a string in the format: yyyy-mm-ddThh:mm:ss"]}'
     end
 
     it 'if time entered in correct format but invalid' do
       get '/test/query?time=13:12:78'
       last_response.should be_forbidden
-      last_response.body.should == "time parameter invalid"
+      last_response.body.should == '{"validation_errors":["time parameter invalid"]}'
     end
 
     it 'if float parameter invalid' do
       post '/test/form/float', {:float => 'balloon'}
       last_response.should be_forbidden
-      last_response.body.should == "float parameter must be a Float"
+      last_response.body.should == '{"validation_errors":["float parameter must be a Float"]}'
     end
 
     it 'when boolean is neither true or false' do
       post '/test/form/boolean', {:boolean => 'untrue'}
       last_response.should be_forbidden
-      last_response.body.should == 'boolean parameter must be true or false'
+      last_response.body.should == '{"validation_errors":["boolean parameter must be true or false"]}'
     end
 
     it 'when extra post parameter given' do
       post '/test/form/string', {:string => 'word', :unlucky => 13}
       last_response.should be_forbidden
-      last_response.body.should == 'unlucky is not a valid parameter'
+      last_response.body.should == '{"validation_errors":["unlucky is not a valid parameter"]}'
     end
 
     it 'when form parameter missing' do

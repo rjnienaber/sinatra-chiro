@@ -52,8 +52,9 @@ module Sinatra
           end
 
           if !errors.compact.empty? then
-            errors.compact.join('<br>')
+            JSON.dump ({:validation_errors => errors.compact})
           end
+
 
         end
       end

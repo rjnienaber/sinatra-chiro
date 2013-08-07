@@ -1,104 +1,197 @@
-<% endpoint.each do |endpoint| %>
+<!DOCTYPE html>
+<!--[if lt IE 7]>
+<html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>
+<html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>
+<html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title></title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!--<link rel="stylesheet" href="css/normalize.css">-->
+  <!--<link rel="stylesheet" href="css/main.css">-->
+  <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+  <!--<script src="js/vendor/modernizr-2.6.2.min.js"></script>-->
+  <style>
+      thead {
+          background-color: #D3EDFB;
+      }
+
+      .container {
+          padding-top: 30px;
+      }
+
+      .hero-unit {
+          color: #54606c;
+          background-color: white;
+      }
+
+      p {
+          color: #73C3ED;
+          font-size: 16px
+      }
+
+      .table {
+          font-size: 14px;
+      }
+
+      pre {
+          height: auto;
+          max-height: 200px;
+          line-height: 10px;
+          overflow: auto;
+          word-break: normal !important;
+          word-wrap: normal !important;
+          white-space: pre !important;
+      }
+  </style>
+</head>
+
+<body>
+<!-- light blue: #73C3ED, charcoal: #54606c -->
+
+<div class="container">
+
+  <% endpoint.each do |endpoint| %>
 
 
+      <div class="hero-unit">
 
-    <h2><%= endpoint.route %></h2>
+        <h2>
+          <%= endpoint.route %>
+        </h2>
 
-    <%= endpoint.description%>
+        <p>
+          <%= endpoint.description %>
+        </p>
 
-    <% if !endpoint.query_params.empty? %>
-        <h3>Query String Parameters:</h3>
-        <table>
-          <tr>
-            <td>Name</td>
-            <td>Description</td>
-            <td>Type</td>
-            <td>Optional</td>
-            <td>Comment</td>
-          </tr>
-          <% endpoint.query_params.each do |p| %>
-              <tr>
-                <td><%= p.name %></td>
-                <td><%= p.description %></td>
-                <td><%= p.type_description %></td>
-                <td><%= p.optional %></td>
-                <td><%= p.comment %></td>
-              </tr>
+        <div class="row">
+
+          <% if !endpoint.query_params.empty? %>
+              <h4>Query String Parameters:</h4>
+
+              <table class='table table-striped table-bordered table-condensed'>
+                <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Type</th>
+                  <th>Optional</th>
+                  <th>Comment</th>
+                </tr>
+                </thead>
+                <% endpoint.query_params.each do |p| %>
+                    <tbody>
+                    <td><%= p.name %></td>
+                    <td><%= p.description %></td>
+                    <td><%= p.type_description %></td>
+                    <td><%= p.optional %></td>
+                    <td><%= p.comment %></td>
+                    </tbody>
+                <% end %>
+              </table>
           <% end %>
-        </table>
-    <% end %>
 
-    <% if !endpoint.named_params.empty? %>
-        <h3>Named Parameters:</h3>
-        <table>
-          <tr>
-            <td>Name</td>
-            <td>Description</td>
-            <td>Type</td>
-            <td>Optional</td>
-            <td>Comment</td>
-          </tr>
-          <% endpoint.named_params.each do |p| %>
-              <tr>
-                <td><%= p.name %></td>
-                <td><%= p.description %></td>
-                <td><%= p.type_description %></td>
-                <td><%= p.optional %></td>
-                <td><%= p.comment %></td>
-              </tr>
+          <% if !endpoint.named_params.empty? %>
+              <h3>Named Parameters:</h3>
+              <table class='table table-striped table-bordered table-condensed'>
+                <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Type</th>
+                  <th>Optional</th>
+                  <th>Comment</th>
+                </tr>
+                </thead>
+                <% endpoint.named_params.each do |p| %>
+                    <tbody>
+                    <td><%= p.name %></td>
+                    <td><%= p.description %></td>
+                    <td><%= p.type_description %></td>
+                    <td><%= p.optional %></td>
+                    <td><%= p.comment %></td>
+                    </tbody>
+                <% end %>
+              </table>
           <% end %>
-        </table>
-    <% end %>
 
-    <% if !endpoint.forms.empty? %>
-        <h3>Form Parameters:</h3>
-        <table>
-          <tr>
-            <td>Name</td>
-            <td>Description</td>
-            <td>Type</td>
-            <td>Optional</td>
-            <td>Comment</td>
-          </tr>
-          <% endpoint.forms.each do |p| %>
-              <tr>
-                <td><%= p.name %></td>
-                <td><%= p.description %></td>
-                <td><%= p.type_description %></td>
-                <td><%= p.optional %></td>
-                <td><%= p.comment %></td>
-              </tr>
+          <% if !endpoint.forms.empty? %>
+              <h3>Form Parameters:</h3>
+              <table class='table table-striped table-bordered table-condensed'>
+                <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Type</th>
+                  <th>Optional</th>
+                  <th>Comment</th>
+                </tr>
+                </thead>
+                <% endpoint.forms.each do |p| %>
+                    <tbody>
+                    <td><%= p.name %></td>
+                    <td><%= p.description %></td>
+                    <td><%= p.type_description %></td>
+                    <td><%= p.optional %></td>
+                    <td><%= p.comment %></td>
+                    </tbody>
+                <% end %>
+              </table>
           <% end %>
-        </table>
-    <% end %>
 
-    <% if !endpoint.possible_errors.empty? %>
-        <h3>Possible Errors:</h3>
-        <table>
-          <tr>
-            <td>Name</td>
-            <td>Code</td>
-            <td>Description</td>
-          </tr>
-          <% endpoint.possible_errors.each do |p| %>
-              <tr>
-                <td><%= p[:name] %></td>
-                <td><%= p[:code] %></td>
-                <td><%= p[:description] %></td>
-              </tr>
+          <% if !endpoint.possible_errors.empty? %>
+              <h3>Possible Errors:</h3>
+              <table class='table table-striped table-bordered table-condensed'>
+                <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Code</th>
+                  <th>Description</th>
+                </tr>
+                </thead>
+                <% endpoint.possible_errors.each do |p| %>
+                    <tbody>
+                    <td><%= p[:name] %></td>
+                    <td><%= p[:code] %></td>
+                    <td><%= p[:description] %></td>
+                    </tbody>
+                <% end %>
+              </table>
           <% end %>
-        </table>
-    <% end %>
 
-    <% if !endpoint.response.nil? %>
-        <h3>Response:</h3>
-        { <br>
-        <% endpoint.response.each do |k, v| %>
-            &nbsp &nbsp<%= PP.pp(k.to_s, "") %>: <%= PP.pp(v, "") %> <br>
-        <% end %>
-        }
+          <% if !endpoint.response.nil? %>
+              <h3>Response:</h3>
+              <pre>
+              {
+                <% endpoint.response.each do |k, v| %>
+                    <%= "#{k}: #{v}" %>
+                <% end %>
+                }
+              </pre>
+          <% end %>
+
+        </div>
+        <!-- .row -->
+
+      </div>
+      <!-- .hero-unit -->
 
 
-    <% end %>
+  <% end %>
 
-<% end %>
+  <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+
+</div>
+<!-- .container -->
+
+</body>
+</html>
+
+
