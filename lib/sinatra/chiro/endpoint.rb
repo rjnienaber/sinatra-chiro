@@ -1,8 +1,9 @@
 class Endpoint
-  attr_reader :description, :verb, :path, :named_params, :query_params, :forms, :possible_errors, :response
+  attr_reader :description, :verb, :path, :named_params, :query_params, :forms, :possible_errors, :response, :title
 
   def initialize(opts)
     @description = opts[:description]
+    @title = opts[:title]
     @verb = opts[:verb]
     @path = opts[:path]
     @named_params = opts[:named_params]
@@ -23,7 +24,8 @@ class Endpoint
   end
 
   def to_json(*a)
-    {:description => description,
+    {:title => title,
+     :description => description,
      :verb => verb,
      :path => path,
      :named_params => named_params,

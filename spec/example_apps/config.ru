@@ -7,8 +7,8 @@ $:.unshift(File.dirname(__FILE__) + '/../../lib/')
 
 require 'sinatra/chiro'
 require File.dirname(__FILE__) + '/server'
-require File.dirname(__FILE__) + '/other_app'
+require File.dirname(__FILE__) + '/post_test_app'
 require File.dirname(__FILE__) + '/classic_app'
 
-run HelloApp.new(AnotherApp.new(Sinatra::Application))
+run PostTestApp.new(GetTestApp.new(Sinatra::Application))
 

@@ -3,6 +3,7 @@ module Sinatra
     module Parameters
       class TimeValidator < Base
         def validate(given)
+          @err=false
           begin
             Time.parse("#{given}")
           rescue ArgumentError

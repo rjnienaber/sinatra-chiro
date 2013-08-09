@@ -3,6 +3,7 @@ module Sinatra
     module Parameters
       class DateValidator < Base
         def validate(given)
+          @err=false
           begin
             Date.parse("#{given}")
           rescue ArgumentError
@@ -16,7 +17,6 @@ module Sinatra
             nil
           end
         end
-
         def comment
           'Must be expressed according to ISO 8601 (ie. YYYY-MM-DD)'
         end

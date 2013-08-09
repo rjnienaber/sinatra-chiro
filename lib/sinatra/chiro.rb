@@ -5,6 +5,7 @@ require 'sinatra/chiro/monkey_patch'
 require 'pp'
 Dir[File.dirname(__FILE__) + '/chiro/parameters/*.rb'].sort.each { |f| require f}
 
+CHIRO_APPS = []
 module Sinatra
   module Chiro
     def endpoints
@@ -20,7 +21,8 @@ module Sinatra
     end
 
 
-    def endpoint(description=nil, opts={})
+    def endpoint(title=nil, description=nil, opts={})
+      opts[:title] ||= title
       opts[:description] ||= description
       opts[:perform_validation] ||= true
       @named_params = []
@@ -49,7 +51,7 @@ module Sinatra
     end
 
     def form(name, description, opts={})
-      opts.merge!(:name => name, :description => description, :optional => true )
+      opts.merge!(:name => name, :description => description)
       Chiro.remove_unknown_param_keys(opts)
       Chiro.set_param_defaults(opts)
       @forms << Parameters::ParameterFactory.validator_from_type(opts)
@@ -83,8 +85,19 @@ module Sinatra
     end
 
     def self.registered(app)
+      CHIRO_APPS << app
       app.get '/routes' do
-        erb(:help, {}, :endpoint => app.documentation.routes(env))
+        routes ||= []
+        CHIRO_APPS.each { |a|
+          if a.respond_to?(:documentation)
+            routes << a.documentation.routes(env)
+          end
+        }
+
+
+        #routes = CHIRO_APPS.map { |a| a.respond_to?(:documentation) ? app.documentation.routes(env) : []}.flatten
+        #pp app.documentation.routes(env)
+        erb(:help, {}, :endpoint => routes.flatten)
       end
     end
 
@@ -103,3 +116,12 @@ module Sinatra
 
   register Sinatra::Chiro
 end
+
+##<li onClick="window.location='#<%= endpoint[0].title %>'">
+#<a href= '#<%= endpoint[0].title %>'><%= endpoint[0].title %></a>
+#          </li>
+#          <% endpoint[1..-1].each do |endpoint| %>
+#              <li  onClick="window.location='#<%= endpoint.title %>'">
+#<a href= '#<%= endpoint.title %>'><%= endpoint.title %></a>
+#              </li>
+#          <% end %>
