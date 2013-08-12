@@ -19,9 +19,9 @@ describe 'Other Application' do
     SERVER_APP
   end
   it 'greets a user using classic app' do
-    get '/hey' do
+    get '/hi' do
       last_response.should be_ok
-      last_response.body.should == "Classic world!"
+      last_response.body.should == "Hello World!"
     end
   end
 end

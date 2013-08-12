@@ -23,6 +23,14 @@ module Sinatra
           @options[:type]
         end
 
+        def type
+          @options[:type]
+        end
+
+        def default
+          @options[:default]
+        end
+
         def optional
           @options[:optional]
         end

@@ -16,9 +16,6 @@ module Sinatra
       end
 
       def routes(env)
-        #endpoints.each do |endpoints|
-        #  endpoints
-        #end
         pp endpoints[0].description
         [endpoints[0].appname, endpoints]
 
