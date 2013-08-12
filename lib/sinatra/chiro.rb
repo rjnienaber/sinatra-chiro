@@ -20,6 +20,9 @@ module Sinatra
       @documentation ||= Documentation.new(endpoints)
     end
 
+    def app_description(description)
+      @app_description = description
+    end
 
     def endpoint(title=nil, description=nil, opts={})
       opts[:title] ||= title
@@ -30,6 +33,7 @@ module Sinatra
       @forms = []
       @possible_errors = []
       @response = nil
+      @appname = @app_description || self.name
 
       yield
 
@@ -40,6 +44,7 @@ module Sinatra
       opts[:possible_errors] = @possible_errors
       opts[:response] = @response
       opts[:path] = @path
+      opts[:appname] = @appname
       endpoints << Endpoint.new(opts)
     end
 
@@ -55,7 +60,6 @@ module Sinatra
       Chiro.remove_unknown_param_keys(opts)
       Chiro.set_param_defaults(opts)
       @forms << Parameters::ParameterFactory.validator_from_type(opts)
-
     end
 
     def query_param(name, description, opts={})
@@ -93,11 +97,7 @@ module Sinatra
             routes << a.documentation.routes(env)
           end
         }
-
-
-        #routes = CHIRO_APPS.map { |a| a.respond_to?(:documentation) ? app.documentation.routes(env) : []}.flatten
-        #pp app.documentation.routes(env)
-        erb(:help, {}, :endpoint => routes.flatten)
+        erb(:help, {}, :endpoint => routes)
       end
     end
 
@@ -116,12 +116,3 @@ module Sinatra
 
   register Sinatra::Chiro
 end
-
-##<li onClick="window.location='#<%= endpoint[0].title %>'">
-#<a href= '#<%= endpoint[0].title %>'><%= endpoint[0].title %></a>
-#          </li>
-#          <% endpoint[1..-1].each do |endpoint| %>
-#              <li  onClick="window.location='#<%= endpoint.title %>'">
-#<a href= '#<%= endpoint.title %>'><%= endpoint.title %></a>
-#              </li>
-#          <% end %>

@@ -1,10 +1,8 @@
 class PostTestApp < Sinatra::Base
   register Sinatra::Chiro
-  endpoint 'greeter', 'greets user' do
-    get '/hi' do
-      "Hello World!"
-    end
-  end
+
+  app_description "POST parameter tester"
+
 
   endpoint 'Form String tester', 'Tests the validation of a String type form parameter' do
     form(:string, 'arbitrary parameter of string type', :type => String, :optional => false)

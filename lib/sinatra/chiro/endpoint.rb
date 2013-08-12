@@ -1,7 +1,8 @@
 class Endpoint
-  attr_reader :description, :verb, :path, :named_params, :query_params, :forms, :possible_errors, :response, :title
+  attr_reader :appname, :description, :verb, :path, :named_params, :query_params, :forms, :possible_errors, :response, :title
 
   def initialize(opts)
+    @appname = opts[:appname]
     @description = opts[:description]
     @title = opts[:title]
     @verb = opts[:verb]

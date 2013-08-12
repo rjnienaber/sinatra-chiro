@@ -12,11 +12,16 @@ module Sinatra
         _, path = env['sinatra.route'].split
         endpoint = endpoints.select { |d| d.path == path}.flatten.first
         raise "Path #{path} doesn't have any docs" unless endpoint
-        [endpoint]
+        [[endpoints[0].appname, [endpoint]]]
       end
 
       def routes(env)
-        endpoints
+        #endpoints.each do |endpoints|
+        #  endpoints
+        #end
+        pp endpoints[0].description
+        [endpoints[0].appname, endpoints]
+
       end
     end
   end

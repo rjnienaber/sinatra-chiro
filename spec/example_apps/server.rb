@@ -3,6 +3,8 @@ class GetTestApp < Sinatra::Base
   register Sinatra::Reloader
   register Sinatra::Chiro
 
+  app_description "GET parameter tester"
+
   endpoint 'Query String tester', 'Tests the validation of all query string parameters' do
     query_param(:string, 'arbitrary parameter of string type', :type => String, :optional => true)
     query_param(:date, 'arbitrary parameter of date type', :type => Date, :optional => true)
