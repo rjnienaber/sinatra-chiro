@@ -15,7 +15,7 @@ module Sinatra
         [[endpoints[0].appname, [endpoint]]]
       end
 
-      def routes(env)
+      def routes
         [endpoints[0].appname, endpoints]
       end
     end

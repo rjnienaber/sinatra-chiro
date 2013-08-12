@@ -90,12 +90,7 @@ module Sinatra
     def self.registered(app)
       CHIRO_APPS << app
       app.get '/routes' do
-        routes ||= []
-        CHIRO_APPS.each { |a|
-          if a.respond_to?(:documentation)
-            routes << a.documentation.routes(env)
-          end
-        }
+        routes = CHIRO_APPS.select { |a| a.respond_to?(:documentation) }.map { |a| a.documentation.routes }
         erb(:help, {}, :endpoint => routes)
       end
     end
