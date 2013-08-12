@@ -16,9 +16,7 @@ module Sinatra
       end
 
       def routes(env)
-        pp endpoints[0].description
         [endpoints[0].appname, endpoints]
-
       end
     end
   end

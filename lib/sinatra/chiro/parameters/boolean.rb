@@ -3,10 +3,8 @@ module Sinatra
     module Parameters
       class BooleanValidator < Base
         def validate(given)
-          if (given[options[:name]]=="true" or given[options[:name]]=="false")
-            nil
-          else
-            "#{options[:name].to_s} parameter must be true or false"
+          if given[name] != "true" && given[name] != "false"
+            "#{name_display} parameter must be true or false"
           end
         end
 

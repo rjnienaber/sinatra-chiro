@@ -3,20 +3,18 @@ module Sinatra
     module Parameters
       class DateValidator < Base
         def validate(given)
-          @err=false
           begin
-            Date.parse("#{given}")
+            Date.parse(given.to_s)
+
+            if given[name] !~ /^\d{4}-\d{2}-\d{2}$/
+              "#{name_display} parameter must be a string in the format: yyyy-mm-dd"
+            end
+
           rescue ArgumentError
-            @err = true
-          end
-          if @err
-            "#{options[:name].to_s} parameter invalid"
-          elsif given[options[:name]] !~ /^\d{4}-\d{2}-\d{2}$/
-            "#{options[:name].to_s} parameter must be a string in the format: yyyy-mm-dd"
-          else
-            nil
+            "#{name_display} parameter invalid"
           end
         end
+
         def comment
           'Must be expressed according to ISO 8601 (ie. YYYY-MM-DD)'
         end

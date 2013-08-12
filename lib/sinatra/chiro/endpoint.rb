@@ -34,7 +34,6 @@ class Endpoint
      :forms => forms,
      :possible_errors => possible_errors,
      :response => response,
-     #:opts => opts
      }.to_json
   end
 end

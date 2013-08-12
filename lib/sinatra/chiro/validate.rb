@@ -10,52 +10,36 @@ module Sinatra
       end
 
       def validate(params, env)
-        params.respond_to?('merge')
         _, path = env['sinatra.route'].split
 
-        endpoint = endpoints.select do |d|
-          d.path == path
-        end.flatten.first
-
+        endpoint = endpoints.select { |d| d.path == path }.flatten.first
+        return if endpoint.nil?
 
         all_given = params.dup
         all_given.delete('captures')
         all_given.delete('splat')
 
-        if !endpoint.nil?
-          named_params = endpoint.named_params
-          query_params = endpoint.query_params
-          forms = endpoint.forms
-          all_params = named_params + query_params + forms
+        all_params = endpoint.named_params + endpoint.query_params + endpoint.forms
 
+        allowed_params = []
+        errors = []
 
-          allowed_params = []
-          given_params = []
-          errors = []
-
-          all_params.each do |object|
-            unless all_given[object.options[:name].to_s] == nil
-                errors << object.validate(all_given)
-            end
-            if !object.options[:optional]
-              errors << "must include a #{object.options[:name].to_s} parameter" if all_given[object.options[:name].to_s] == nil
-            end
-            allowed_params << object.options[:name].to_s
+        all_params.each do |parameter|
+          unless all_given[parameter.name_display].nil?
+            errors << parameter.validate(all_given)
           end
-
-          all_given.each do |k, v|
-            given_params << k.to_s
+          if !parameter.optional
+            errors << "must include a #{parameter.name_display} parameter" if all_given[parameter.name_display].nil?
           end
+          allowed_params << parameter.name_display
+        end
 
-          given_params.each do |param|
-            errors << "#{param} is not a valid parameter" if !allowed_params.include?(param)
-          end
+        all_given.map { |k, _| k.to_s}.each do |param|
+          errors << "#{param} is not a valid parameter" if !allowed_params.include?(param)
+        end
 
-          if !errors.compact.empty? then
-            JSON.dump ({:validation_errors => errors.compact})
-          end
-
-
+        if !errors.compact.empty? then
+          JSON.dump ({:validation_errors => errors.compact})
         end
       end
     end

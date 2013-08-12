@@ -3,28 +3,21 @@ module Sinatra
     module Parameters
       class ParameterFactory
         def self.validator_from_type(options)
-          type = options[:type]
-          if type == String
-            Sinatra::Chiro::Parameters::StringValidator.new(options)
-          elsif type == Fixnum
-            Sinatra::Chiro::Parameters::FixnumValidator.new(options)
-          elsif type == Float
-            Sinatra::Chiro::Parameters::FloatValidator.new(options)
-          elsif type == :boolean
-            Sinatra::Chiro::Parameters::BooleanValidator.new(options)
-          elsif type == Float
-            Sinatra::Chiro::Parameters::FloatValidator.new(options)
-          elsif type.is_a? Regexp
-            Sinatra::Chiro::Parameters::RegexpValidator.new(options)
-          elsif type == Date
-            Sinatra::Chiro::Parameters::DateValidator.new(options)
-          elsif type == DateTime
-            Sinatra::Chiro::Parameters::DateTimeValidator.new(options)
-          elsif type == Time
-            Sinatra::Chiro::Parameters::TimeValidator.new(options)
-          elsif type == [String]
-            Sinatra::Chiro::Parameters::ArrayValidator.new(options)
-          end
+          validator = case options[:type].to_s
+                        when 'String' then StringValidator
+                        when 'Fixnum' then FixnumValidator
+                        when 'Float' then FloatValidator
+                        when 'Date' then DateValidator
+                        when 'DateTime' then DateTimeValidator
+                        when 'Time' then TimeValidator
+                        when 'boolean' then BooleanValidator
+                        when '[String]' then ArrayValidator
+                        else
+                          if options[:type].is_a? Regexp
+                            RegexpValidator
+                          end
+                      end
+          validator.new(options)
         end
       end
     end

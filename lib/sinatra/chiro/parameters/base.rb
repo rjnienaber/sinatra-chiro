@@ -11,6 +11,10 @@ module Sinatra
           @options[:name]
         end
 
+        def name_display
+          @options[:name].to_s
+        end
+
         def description
           @options[:description]
         end

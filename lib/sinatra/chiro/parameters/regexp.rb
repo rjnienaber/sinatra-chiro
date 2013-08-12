@@ -4,11 +4,11 @@ module Sinatra
       class RegexpValidator < Base
 
         def validate(given)
-          "#{options[:name].to_s} parameter should match regexp: #{options[:type]}" if given[options[:name]] !~ options[:type]
+          "#{name_display} parameter should match regexp: #{options[:type]}" if given[name] !~ options[:type]
         end
 
         def type_description
-          options[:type_description] || "Regexp"
+          super || "Regexp"
         end
 
         def comment

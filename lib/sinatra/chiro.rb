@@ -2,7 +2,6 @@ require 'sinatra/chiro/endpoint'
 require 'sinatra/chiro/document'
 require 'sinatra/chiro/validate'
 require 'sinatra/chiro/monkey_patch'
-require 'pp'
 Dir[File.dirname(__FILE__) + '/chiro/parameters/*.rb'].sort.each { |f| require f}
 
 CHIRO_APPS = []
@@ -78,7 +77,7 @@ module Sinatra
       super
     end
 
-    def post(path, opts = {}, &bk)
+    def post(path, opts = {}, &block)
       @path = path
       @verb = :POST
       super
