@@ -10,5 +10,5 @@ require File.dirname(__FILE__) + '/server'
 require File.dirname(__FILE__) + '/post_test_app'
 require File.dirname(__FILE__) + '/classic_app'
 
-run PostTestApp.new(GetTestApp.new(Sinatra::Application))
+run GetTestApp.new(PostTestApp.new(Sinatra::Application))
 

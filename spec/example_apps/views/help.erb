@@ -17,8 +17,16 @@
   <!--<link rel="stylesheet" href="css/normalize.css">-->
   <!--<link rel="stylesheet" href="css/main.css">-->
   <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/css/bootstrap.min.css" rel="stylesheet">
+  <!--<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">-->
   <!--<script src="js/vendor/modernizr-2.6.2.min.js"></script>-->
   <style>
+
+      .scrollspy-example {
+          height: 200px;
+          overflow: auto;
+          position: relative;
+      }
+
       thead {
           background-color: #D3EDFB;
       }
@@ -32,7 +40,6 @@
           color: #54606c;
           padding: 30px;
       }
-
 
       p {
           color: #73C3ED;
@@ -63,19 +70,28 @@
           border-left: solid thin #DDDDDD;
       }
 
-      .btn {
+      li {
           color: #54606c;
-          padding-left: 20px;
+          padding: 0 20px 0 20px;
           width: 100%;
           text-align: left
       }
 
-      .btn:hover {
+      a {
+          color: #54606c;
+      }
+
+      .nav-pills>li>a:hover {
+          color: white;
+          background-color: #D3EDFB;
+      }
+
+      .nav-pills>li.active>a:hover {
           color: #54606c;
           background-color: #D3EDFB;
       }
 
-      .btn:active {
+      .nav-pills>li.active>a {
           color: #54606c;
           background-color: #D3EDFB;
       }
@@ -86,122 +102,123 @@
 
 <body>
 <!-- light blue: #73C3ED, charcoal: #54606c -->
-
+<!--<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>-->
 
 <div class="container">
 
-  <div class="col-lg-9" data-spy="scroll" data-target="#navbar-example" data-offset="0">
+  <div class="col-lg-9">
+    <div data-spy="scroll" data-target="#navbarExample" data-offset="50" class="scrollspy-example">
 
-    <% endpoint.each do |endpoint| %>
-        <div class="hero-unit" id="<%= endpoint.title %>">
+      <% endpoint.each do |endpoint| %>
+          <div class="hero-unit" id="<%= endpoint.title.downcase.tr(" ", "_") %>">
 
-          <h2>
-            <%= endpoint.title %>
-          </h2>
+            <h2>
+              <%= endpoint.title %>
+            </h2>
 
-          <p>
-            <%= endpoint.description %>
-          </p>
+            <p>
+              <%= endpoint.description %>
+            </p>
 
-          <h3>
-            <%= endpoint.route %>
-          </h3>
+            <h3>
+              <%= endpoint.route %>
+            </h3>
 
-          <% if !endpoint.query_params.empty? %>
-              <h4>Query String Parameters:</h4>
+            <% if !endpoint.query_params.empty? %>
+                <h4>Query String Parameters:</h4>
 
-              <table class='table table-striped table-bordered table-condensed'>
-                <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Description</th>
-                  <th>Type</th>
-                  <th>Optional</th>
-                  <th>Comment</th>
-                </tr>
-                </thead>
-                <% endpoint.query_params.each do |p| %>
-                    <tbody>
-                    <td><%= p.name %></td>
-                    <td><%= p.description %></td>
-                    <td><%= p.type_description %></td>
-                    <td><%= p.optional %></td>
-                    <td><%= p.comment %></td>
-                    </tbody>
-                <% end %>
-              </table>
-          <% end %>
+                <table class='table table-striped table-bordered table-condensed'>
+                  <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Type</th>
+                    <th>Optional</th>
+                    <th>Comment</th>
+                  </tr>
+                  </thead>
+                  <% endpoint.query_params.each do |p| %>
+                      <tbody>
+                      <td><%= p.name %></td>
+                      <td><%= p.description %></td>
+                      <td><%= p.type_description %></td>
+                      <td><%= p.optional %></td>
+                      <td><%= p.comment %></td>
+                      </tbody>
+                  <% end %>
+                </table>
+            <% end %>
 
-          <% if !endpoint.named_params.empty? %>
-              <h4>Named Parameters:</h4>
-              <table class='table table-striped table-bordered table-condensed'>
-                <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Description</th>
-                  <th>Type</th>
-                  <th>Optional</th>
-                  <th>Comment</th>
-                </tr>
-                </thead>
-                <% endpoint.named_params.each do |p| %>
-                    <tbody>
-                    <td><%= p.name %></td>
-                    <td><%= p.description %></td>
-                    <td><%= p.type_description %></td>
-                    <td><%= p.optional %></td>
-                    <td><%= p.comment %></td>
-                    </tbody>
-                <% end %>
-              </table>
-          <% end %>
+            <% if !endpoint.named_params.empty? %>
+                <h4>Named Parameters:</h4>
+                <table class='table table-striped table-bordered table-condensed'>
+                  <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Type</th>
+                    <th>Optional</th>
+                    <th>Comment</th>
+                  </tr>
+                  </thead>
+                  <% endpoint.named_params.each do |p| %>
+                      <tbody>
+                      <td><%= p.name %></td>
+                      <td><%= p.description %></td>
+                      <td><%= p.type_description %></td>
+                      <td><%= p.optional %></td>
+                      <td><%= p.comment %></td>
+                      </tbody>
+                  <% end %>
+                </table>
+            <% end %>
 
-          <% if !endpoint.forms.empty? %>
-              <h4>Form Parameters:</h4>
-              <table class='table table-striped table-bordered table-condensed'>
-                <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Description</th>
-                  <th>Type</th>
-                  <th>Optional</th>
-                  <th>Comment</th>
-                </tr>
-                </thead>
-                <% endpoint.forms.each do |p| %>
-                    <tbody>
-                    <td><%= p.name %></td>
-                    <td><%= p.description %></td>
-                    <td><%= p.type_description %></td>
-                    <td><%= p.optional %></td>
-                    <td><%= p.comment %></td>
-                    </tbody>
-                <% end %>
-              </table>
-          <% end %>
+            <% if !endpoint.forms.empty? %>
+                <h4>Form Parameters:</h4>
+                <table class='table table-striped table-bordered table-condensed'>
+                  <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Type</th>
+                    <th>Optional</th>
+                    <th>Comment</th>
+                  </tr>
+                  </thead>
+                  <% endpoint.forms.each do |p| %>
+                      <tbody>
+                      <td><%= p.name %></td>
+                      <td><%= p.description %></td>
+                      <td><%= p.type_description %></td>
+                      <td><%= p.optional %></td>
+                      <td><%= p.comment %></td>
+                      </tbody>
+                  <% end %>
+                </table>
+            <% end %>
 
-          <% if !endpoint.possible_errors.empty? %>
-              <h4>Possible Errors:</h4>
-              <table class='table table-striped table-bordered table-condensed'>
-                <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Code</th>
-                  <th>Description</th>
-                </tr>
-                </thead>
-                <% endpoint.possible_errors.each do |p| %>
-                    <tbody>
-                    <td><%= p[:name] %></td>
-                    <td><%= p[:code] %></td>
-                    <td><%= p[:description] %></td>
-                    </tbody>
-                <% end %>
-              </table>
-          <% end %>
+            <% if !endpoint.possible_errors.empty? %>
+                <h4>Possible Errors:</h4>
+                <table class='table table-striped table-bordered table-condensed'>
+                  <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Code</th>
+                    <th>Description</th>
+                  </tr>
+                  </thead>
+                  <% endpoint.possible_errors.each do |p| %>
+                      <tbody>
+                      <td><%= p[:name] %></td>
+                      <td><%= p[:code] %></td>
+                      <td><%= p[:description] %></td>
+                      </tbody>
+                  <% end %>
+                </table>
+            <% end %>
 
-          <% if !endpoint.response.nil? %>
-              <h4>Response:</h4>
+            <% if !endpoint.response.nil? %>
+                <h4>Response:</h4>
               <pre>
               {
                 <% endpoint.response.each do |k, v| %>
@@ -209,39 +226,40 @@
                 <% end %>
                 }
               </pre>
-          <% end %>
-        </div>
-        <!-- .hero-unit -->
-    <% end %>
+            <% end %>
+          </div>
+          <!-- .hero-unit -->
+      <% end %>
 
-    <!-- col-lg-9 -->
+      <!-- col-lg-9 -->
+    </div>
 
   </div>
   <!-- .row -->
 
   <div class="row">
     <div class="col-lg-3 side">
-      <div id="navbar-example" class="col-lg-3 sidebar">
+      <div id="navbarExample">
+      <div class="col-lg-3 sidebar">
         <ul type=none class="nav nav-pills affix">
-          <li onClick="window.location='#<%= endpoint[0].title %>'">
-            <a href= '#<%= endpoint[0].title %>'><%= endpoint[0].title %></a>
-          </li>
-          <% endpoint[1..-1].each do |endpoint| %>
-              <li  onClick="window.location='#<%= endpoint.title %>'">
-                <a href= '#<%= endpoint.title %>'><%= endpoint.title %></a>
+          <% endpoint.each do |endpoint| %>
+              <li class="">
+                <a href='#<%= endpoint.title.downcase.tr(" ", "_") %>'><%= endpoint.title %></a>
               </li>
           <% end %>
         </ul>
+        </div>
       </div>
     </div>
   </div>
 
 
-
 </div>
 <!-- .container -->
-<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/js/bootstrap.min.js"></script>
 
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc1/js/bootstrap.min.js"></script>
 </body>
 </html>
 
