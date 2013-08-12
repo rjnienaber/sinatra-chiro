@@ -3,7 +3,7 @@ module Sinatra
     module Parameters
       class FixnumValidator < Base
         def validate(given)
-          "#{name_display} parameter must be an integer" if  given[name] !~/^\s*\d+\s*$/
+          "#{name_display} parameter must be an integer" if given[name] !~/^\s*\d+\s*$/
         end
       end
     end

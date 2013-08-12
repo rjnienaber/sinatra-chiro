@@ -3,16 +3,13 @@ module Sinatra
     module Parameters
       class DateValidator < Base
         def validate(given)
-          begin
-            Date.parse(given.to_s)
+          Date.parse(given.to_s)
 
-            if given[name] !~ /^\d{4}-\d{2}-\d{2}$/
-              "#{name_display} parameter must be a string in the format: yyyy-mm-dd"
-            end
-
-          rescue ArgumentError
-            "#{name_display} parameter invalid"
+          if given[name] !~ /^\d{4}-\d{2}-\d{2}$/
+            "#{name_display} parameter must be a string in the format: yyyy-mm-dd"
           end
+        rescue ArgumentError
+          "#{name_display} parameter invalid"
         end
 
         def comment
