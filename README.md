@@ -1,4 +1,3 @@
-
 chiro
 =============
 
@@ -32,7 +31,7 @@ The application must first be named using `app_description`, as shown above, the
 
 ## Declaring Parameters
 
-If a parameter received via a request has not bee declared, or has been declared improperly, a validation error will arise. There are three types of parameters which can be declared in the endpoint:
+If a parameter received via a request has not been declared, or has been declared improperly, a validation error will arise. There are three types of parameters which can be declared in the endpoint:
 
 Query Parameters are found within the query string (eg. /greeter?greeting=hello)
 
@@ -65,7 +64,7 @@ end
 
 ## Regular Expressions
 
-To customise the validation process to validate a parameter according to a regular expression, you substitute the regular expression at the value of the `:type` argument. It is also useful to add to the declaration a `:comment` argument to explain the expression, and `:type_description`, which updates the type in the documentation.
+To customise the validation process to validate a parameter according to a regular expression, you substitute the regular expression as the value of the `:type` argument. It is also useful to add to the declaration a `:comment` argument to explain the expression, and `:type_description`, which updates the type in the documentation.
 
 For example, you might want a `:gender` parameter which only accepts "male" or "female", and would want it to be validated accordingly.
 
@@ -118,33 +117,3 @@ If any validation errors occur when your application is run, a response status c
   ]
 }
 ```
-
-Here is a list of all possible validation errors and their causes:
-
-```ruby
-# when parameter is of the wrong type
-"[boolean type parameter] parameter must be true or false"
-"[array type parameter] parameter must be an Array of Strings"
-"[date type parameter] parameter must be a string in the format: yyyy-mm-dd"
-"[time type parameter] parameter must be a string in the format: hh:mm:ss"
-"[datetime type parameter] parameter must be a string in the format: yyyy-mm-ddThh:mm:ss"
-"[float type parameter] parameter must be a float"
-"[fixnum type parameter] parameter must be an integer"
-"[string type parameter] parameter must be a string of only letters"
-
-# when a non-optional parameter is not included
-"must include a [non-optional parameter] parameter"
-
-# when a parameter is included which has not been declared in the endpoint
-"[parameter] is not a valid parameter"
-
-# when an ISO 8601 date is invalid, eg. a non existent date
-"[time, date, or datetime parameter] parameter invalid"
-
-# when regular expression is not matched
-"[regexp type parameter] parameter should match regexp: [regular expression to be matched]"
-
-# when a parameter is left blank
-"[parameter] parameter must not be empty"
-```
-
