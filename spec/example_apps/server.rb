@@ -71,4 +71,11 @@ class GetTestApp < Sinatra::Base
       "Valid"
     end
   end
+
+  endpoint 'GET parameter tester', 'Tests the validation of GET parameters' do
+    named_param(:parameter, 'arbitrary parameter of string type', :type => String, :optional => false)
+    get '/test/get/:parameter' do |param|
+      "#{param}"
+    end
+  end
 end

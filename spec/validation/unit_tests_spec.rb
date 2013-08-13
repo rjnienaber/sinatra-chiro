@@ -2,26 +2,58 @@ require 'spec_helper'
 ru_file = File.dirname(__FILE__) + '/../example_apps/config.ru'
 SERVER_APP = Rack::Builder.parse_file(ru_file).first
 
-describe 'Other Application' do
+describe 'Classic Style Application' do
   def app
     SERVER_APP
   end
-  it 'greets a user using other app' do
-    get '/hi' do
-      last_response.should be_ok
-      last_response.body.should == "Hello World!"
-    end
+  it 'greets a user' do
+    get '/hi'
+    last_response.should be_ok
+    last_response.body.should == "Hello World!"
   end
 end
 
-describe 'Other Application' do
+describe 'Post Test Application' do
   def app
     SERVER_APP
   end
-  it 'greets a user using classic app' do
-    get '/hi' do
+
+  context 'succeeds' do
+    it 'when regexp form parameter entered correctly' do
+      post 'test/form/gender', {:gender => 'male'}
       last_response.should be_ok
-      last_response.body.should == "Hello World!"
+      last_response.body.should == "Valid"
+    end
+
+    it 'when date form parameter entered correctly' do
+      post 'test/form/date', {:date => '1234-12-12'}
+      last_response.should be_ok
+      last_response.body.should == "Valid"
+    end
+  end
+
+  context 'returns validation error' do
+    it 'if float parameter invalid' do
+      post '/test/form/float', {:float => 'balloon'}
+      last_response.should be_forbidden
+      last_response.body.should == '{"validation_errors":["float parameter must be a Float"]}'
+    end
+
+    it 'when boolean is neither true or false' do
+      post '/test/form/boolean', {:boolean => 'untrue'}
+      last_response.should be_forbidden
+      last_response.body.should == '{"validation_errors":["boolean parameter must be true or false"]}'
+    end
+
+    it 'when extra post parameter given' do
+      post '/test/form/string', {:string => 'word', :unlucky => 13}
+      last_response.should be_forbidden
+      last_response.body.should == '{"validation_errors":["unlucky is not a valid parameter"]}'
+    end
+
+    it 'when form parameter missing' do
+      get '/test/form/fixnum'
+      last_response.should be_not_found
     end
   end
 end
@@ -46,13 +78,6 @@ describe 'Server application' do
     end
     #tests query string parameter validation
 
-    it 'when date form parameter entered correctly' do
-      post 'test/form/date', {:date => '1234-12-12'}
-      last_response.should be_ok
-      last_response.body.should == "Valid"
-    end
-    #tests form parameter validation
-
     it 'when named parameter repeated in query string' do
       get 'test/named/string/word?string=other'
       last_response.should be_ok
@@ -60,28 +85,39 @@ describe 'Server application' do
     end
     #tests to ensure repeated parameters in query string are ignored
 
+    it 'when non-strings given as array values' do
+      get 'test/query?array[]=3.14&array[]=9.81'
+      last_response.should be_ok
+      last_response.body.should == 'Valid'
+    end
+
+    it 'when valid parameter given for get method' do
+      get 'test/get/scottadamskicksass'
+      last_response.should be_ok
+      last_response.body.should == 'scottadamskicksass'
+    end
+
     it 'when multiple query string parameters entered correctly' do
       get 'test/query?fixnum=12&string=hello&float=1.5&date=1999-12-12&time=12:33:11&datetime=1223-12-12T12:00:00&boolean=false&array[]=hello&array[]=howdy&gender=male'
       last_response.should be_ok
       last_response.body.should == 'Valid'
     end
     #tests validation of parameter types: string, float, time, date, datetime, fixnum, array, boolean
-
-    it 'when regexp form parameter entered correctly' do
-      post 'test/form/gender', {:gender => 'male'}
-      last_response.should be_ok
-      last_response.body.should == "Valid"
-    end
-    #tests validation of parameter type regexp
   end
 
 
   context 'returns validation error' do
-
     it 'if extra parameter is included' do
       get '/test/query?extra=value'
       last_response.should be_forbidden
       last_response.body.should == '{"validation_errors":["extra is not a valid parameter"]}'
+    end
+
+    it 'when invalid parameter given for get method' do
+      get 'test/get/numb3r' do
+        last_response.should be_forbidden
+        last_response.body.should == '{"validation_errors":["parameter parameter must be a string of only letters"]}'
+      end
     end
 
     it 'if multiple validation errors' do
@@ -123,29 +159,6 @@ describe 'Server application' do
       get '/test/query?time=13:12:78'
       last_response.should be_forbidden
       last_response.body.should == '{"validation_errors":["time parameter invalid"]}'
-    end
-
-    it 'if float parameter invalid' do
-      post '/test/form/float', {:float => 'balloon'}
-      last_response.should be_forbidden
-      last_response.body.should == '{"validation_errors":["float parameter must be a Float"]}'
-    end
-
-    it 'when boolean is neither true or false' do
-      post '/test/form/boolean', {:boolean => 'untrue'}
-      last_response.should be_forbidden
-      last_response.body.should == '{"validation_errors":["boolean parameter must be true or false"]}'
-    end
-
-    it 'when extra post parameter given' do
-      post '/test/form/string', {:string => 'word', :unlucky => 13}
-      last_response.should be_forbidden
-      last_response.body.should == '{"validation_errors":["unlucky is not a valid parameter"]}'
-    end
-
-    it 'when form parameter missing' do
-      get '/test/form/fixnum'
-      last_response.should be_not_found
     end
   end
 end
