@@ -1,11 +1,12 @@
 require 'spec_helper'
-ru_file = File.dirname(__FILE__) + '/../example_apps/config.ru'
+ru_file = File.dirname(__FILE__) + '/../example_apps/common/config.ru'
 SERVER_APP = Rack::Builder.parse_file(ru_file).first
 
 describe 'Classic Style Application' do
   def app
     SERVER_APP
   end
+
   it 'greets a user' do
     get '/hi'
     last_response.should be_ok

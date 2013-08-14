@@ -89,9 +89,15 @@ module Sinatra
 
     def self.registered(app)
       CHIRO_APPS << app
+
+      app.set :erb_file, :help
+      app.set :views_location, File.join(File.dirname(__FILE__), '..', 'views')
+
       app.get '/routes' do
         routes = CHIRO_APPS.select { |a| a.respond_to?(:documentation) }.map { |a| a.documentation.routes }
-        erb(:help, {}, :endpoint => routes)
+        erb_file = settings.erb_file
+        views = settings.views_location
+        erb(erb_file, {:views => views}, :endpoint => routes)
       end
     end
 

@@ -5,7 +5,6 @@ require 'sinatra/chiro'
 require 'sinatra/reloader'
 require 'rack/test'
 
-require 'example_apps/server'
 
 #set :environment, :test
 

@@ -6,10 +6,10 @@ require 'sinatra/chiro_version'
 Gem::Specification.new do |spec|
   spec.name          = 'sinatra-chiro'
   spec.version       = Sinatra::Chiro::VERSION
-  spec.authors       = ['Richard Nienaber']
+  spec.authors       = ['Richard Nienaber', 'Scott Adams']
   spec.email         = %w(rjnienaber@gmail.com)
   spec.description   = %q{Documents and validates sinatra api requests}
-  spec.summary       = %q{An easy way to product self-documenting sinatra apis}
+  spec.summary       = %q{An easy way to produce self-documenting sinatra apis}
   spec.homepage      = 'https://github.com/rjnienaber/chiro'
   spec.license       = 'MIT'
 
