@@ -24,7 +24,7 @@ module Sinatra
         end
 
         def type_description
-          @options[:type]
+          @options[:type_description] || @options[:type]
         end
 
         def type

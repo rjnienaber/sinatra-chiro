@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.email         = %w(rjnienaber@gmail.com)
   spec.description   = %q{Documents and validates sinatra api requests}
   spec.summary       = %q{An easy way to produce self-documenting sinatra apis}
-  spec.homepage      = 'https://github.com/rjnienaber/chiro'
+  spec.homepage      = 'https://github.com/rjnienaber/sinatra-chiro'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files`.split($/).reject { |f| f.include?('spec') } - %w(.gitignore .rvmrc .travis.yml Gemfile.lock Guardfile Rakefile)
