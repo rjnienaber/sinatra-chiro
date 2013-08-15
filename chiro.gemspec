@@ -3,6 +3,7 @@ lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'sinatra/chiro_version'
 
+
 Gem::Specification.new do |spec|
   spec.name          = 'sinatra-chiro'
   spec.version       = Sinatra::Chiro::VERSION
@@ -13,7 +14,7 @@ Gem::Specification.new do |spec|
   spec.homepage      = 'https://github.com/rjnienaber/chiro'
   spec.license       = 'MIT'
 
-  spec.files         = `git ls-files`.split($/) - %w(.gitignore .rvmrc .travis.yml Gemfile.lock Guardfile)
+  spec.files         = `git ls-files`.split($/).reject { |f| f.include?('spec') } - %w(.gitignore .rvmrc .travis.yml Gemfile.lock Guardfile Rakefile)
   #spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = %w(lib)

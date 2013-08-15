@@ -23,7 +23,9 @@ module Sinatra
     def show_help
       if self.class.respond_to?(:validator)
         status 200
-        throw :halt, "#{erb(:help, {}, :endpoint => self.class.documentation.document(env)) }"
+        erb_file = settings.erb_file
+        views = settings.views_location
+        throw :halt, "#{erb(erb_file, {:views => views}, :endpoint => self.class.documentation.document(env)) }"
       end
     end
   end
