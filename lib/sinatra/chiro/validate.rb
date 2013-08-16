@@ -12,6 +12,7 @@ module Sinatra
       def validate(params, env)
         _, path = env['sinatra.route'].split
 
+
         endpoint = endpoints.select { |d| d.path == path }.flatten.first
         return if endpoint.nil?
 
@@ -25,7 +26,9 @@ module Sinatra
         errors = []
 
         all_params.each do |parameter|
-          unless all_given[parameter.name_display].nil?
+          if all_given[parameter.name_display].nil?
+            params[parameter.name_display] = parameter.default
+          else
             errors << parameter.validate(all_given)
           end
           if !parameter.optional

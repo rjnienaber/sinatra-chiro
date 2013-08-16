@@ -3,7 +3,7 @@ module Sinatra
     #we monkey patch here because at this point we know the name of the route
     alias_method :old_route_eval, :route_eval
     def route_eval
-      show_help if params.has_key? "help"
+      show_help if params.has_key? settings.help_key
       validate_parameters if self.class.respond_to?(:validator)
 
       old_route_eval { yield }

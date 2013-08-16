@@ -1,9 +1,8 @@
-require 'sinatra'
-
 app_description "Classic style application"
 
-endpoint 'Greeter', 'Greets user' do
+endpoint 'Greeter', 'Greets user by name or defaults to world' do
+  query_param(:name, 'name of the user', :default => 'World')
   get '/hi' do
-    "Hello World!"
+    "Hello #{params[:name]}!"
   end
 end

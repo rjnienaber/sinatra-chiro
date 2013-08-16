@@ -1,14 +1,11 @@
-require 'sinatra'
 require 'sinatra/base'
 require "sinatra/reloader"
 require 'json'
 
 $:.unshift(File.dirname(__FILE__) + '/../../lib/')
-puts "CHANGING ROUTE"
-set :routes_path, "/reroutes"
 
 require 'sinatra/chiro'
-require File.dirname(__FILE__) + '/classic_app'
+require File.dirname(__FILE__) + '/application'
 
 run Sinatra::Application
 

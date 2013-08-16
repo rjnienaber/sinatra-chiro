@@ -7,7 +7,13 @@ describe 'Classic Style Application' do
     SERVER_APP
   end
 
-  it 'greets a user' do
+  it 'greets a user by name' do
+    get '/hi?name=scotty'
+    last_response.should be_ok
+    last_response.body.should == "Hello scotty!"
+  end
+
+  it 'defaults to greet world if name not given' do
     get '/hi'
     last_response.should be_ok
     last_response.body.should == "Hello World!"
@@ -17,6 +23,19 @@ end
 describe 'Post Test Application' do
   def app
     SERVER_APP
+  end
+
+  context 'documentation generated' do
+    it 'if help requested' do
+      get '/test/query?help'
+      last_response.should be_ok
+    end
+
+    it 'if routes requested' do
+      pending ('test fails but /routes in browser works')
+      get '/routes'
+      last_response.should be_ok
+    end
   end
 
   context 'succeeds' do

@@ -90,10 +90,15 @@ module Sinatra
     def self.registered(app)
       CHIRO_APPS << app
 
+      app.set :routes_path, '/routes' unless app.settings.respond_to?(:routes_path)
+      app.set :help_key, "help"
       app.set :erb_file, :help
       app.set :views_location, File.join(File.dirname(__FILE__), '..', 'views')
 
-      app.get '/routes' do
+
+      puts caller.join("\n")
+      puts "REGISTERING ROUTE"
+      app.get app.settings.routes_path do
         routes = CHIRO_APPS.select { |a| a.respond_to?(:documentation) }.map { |a| a.documentation.routes }
         erb_file = settings.erb_file
         views = settings.views_location
