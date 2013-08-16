@@ -148,7 +148,7 @@ The documentation for a specific route can be viewed by entering the key "help" 
 
     set :help_key, "new_help_key"
     
-The documentation for all routes can be viewed using the path "/routes". Similar to the help key, this can be changed by including:
+The documentation for all routes can be viewed using the path "/routes". Similar to the help key, this can be changed by including the following before you require chiro in your application:
 
     set :routes_path, "/newroutespath"
 

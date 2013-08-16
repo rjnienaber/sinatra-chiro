@@ -2,7 +2,6 @@ app_description "Classic style application"
 
 set :erb_file, :test
 set :views_location, File.join(File.dirname(__FILE__), 'views')
-#set :routes_path, "/reroutes"
 set :help_key, "helpme"
 
 
