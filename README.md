@@ -1,4 +1,4 @@
-chiro
+Chiro
 =============
 
 Chiro is a DSL for your sinatra application which generates readable documentation and validates the parameters used in your API. 
@@ -19,7 +19,7 @@ If you're using Bundler, add the gem to Gemfile
 
 Run `bundle-install`
 
-If you clone the github repository, you will have access to the unit tests and example applications. These include a demonstration application which shows some of the basic features of chiro and a simple yet exhaustive application which uses all validation features for the RSpec unit tests.
+If you clone the github repository, you will have access to the unit tests and example applications. These include a demonstration application which shows some of the basic features of Chiro and a simple yet exhaustive application which uses all validation features for the RSpec unit tests.
 
 ## Implementation
 
@@ -152,7 +152,7 @@ The documentation for all routes can be viewed using the path "/routes". Similar
 
     set :routes_path, "/newroutespath"
 
-The documentation format is determined by a default erb template within chiro. To use a custom template, somewhere inside the root directory include a folder named "views" containing an erb file with your chosen documentation format. You must then inform chiro of this by including the following at the start of each application file:
+The documentation format is determined by a default erb template within Chiro. To use a custom template, somewhere inside the root directory include a folder named "views" containing an erb file with your chosen documentation format. You must then inform Chiro of this by including the following at the start of each application file:
 ```
 set :erb_file, :new_file_name
 set :views_location, 'new_views_location'
